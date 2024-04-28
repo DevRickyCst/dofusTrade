@@ -1,0 +1,93 @@
+Resources:
+  # Création d'un groupe de sécurité pour permettre l'accès à la base de données MySQL
+  DBSecurityGroup:
+    Type: "AWS::RDS::DBSecurityGroup"
+    Properties:
+      GroupDescription: "Allow access to the MySQL DB instance"
+      DBSecurityGroupIngress:
+        - CIDRIP: "0.0.0.0/0" # Permettre l'accès depuis n'importe où (à modifier en fonction de vos besoins)
+          FromPort: "3306"
+          ToPort: "3306"
+          EC2SecurityGroupName: !Ref EC2SecurityGroup
+
+  # Création d'un groupe de sécurité pour les instances EC2
+  EC2SecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Allow access to the EC2 instances"
+      SecurityGroupIngress:
+        - CidrIp: "0.0.0.0/0" # Permettre l'accès depuis n'importe où (à modifier en fonction de vos besoins)
+          IpProtocol: "tcp"
+          FromPort: "22" # SSH
+          ToPort: "22"
+      Tags:
+        - Key: Name
+          Value: "EC2SecurityGroup"
+
+  # Création de l'instance de base de données MySQL
+  MySQLDBInstance:
+    Type: "AWS::RDS::DBInstance"
+    Properties:
+      DBInstanceIdentifier: "MyDBInstance"
+      Engine: "mysql"
+      DBName: "dofus-trade-db"
+      MasterUsername: "admin"
+      MasterUserPassword: "admin"
+      AllocatedStorage: "20" # Taille de l'espace de stockage (en Go)
+      DBInstanceClass: "db.t2.micro" # Type d'instance de base de données
+      VPCSecurityGroups:
+        - Ref: DBSecurityGroup
+      Tags:
+        - Key: Name
+          Value: "MyDBInstance"
+
+  # Création de tables dans la base de données
+  MyTable1:
+    Type: "AWS::RDS::DBInstance"
+    Properties:
+      DBInstanceIdentifier: !Ref MySQLDBInstance
+      DBName: "MyDatabase"
+      Engine: "mysql"
+      DBInstanceClass: "db.t2.micro"
+      MasterUsername: "admin"
+      MasterUserPassword: "MySecurePassword"
+      PubliclyAccessible: "true"
+      DBSubnetGroupName: "default"
+      DBSecurityGroups:
+        - Ref: DBSecurityGroup
+      Tags:
+        - Key: Name
+          Value: "MyTable1"
+      Properties:
+        MyColumn1:
+          Type: "VARCHAR(255)"
+          Nullable: "false"
+        MyColumn2:
+          Type: "INT"
+          Nullable: "false"
+        # Ajoutez d'autres colonnes selon vos besoins
+
+  MyTable2:
+    Type: "AWS::RDS::DBInstance"
+    Properties:
+      DBInstanceIdentifier: !Ref MySQLDBInstance
+      DBName: "MyDatabase"
+      Engine: "mysql"
+      DBInstanceClass: "db.t2.micro"
+      MasterUsername: "admin"
+      MasterUserPassword: "MySecurePassword"
+      PubliclyAccessible: "true"
+      DBSubnetGroupName: "default"
+      DBSecurityGroups:
+        - Ref: DBSecurityGroup
+      Tags:
+        - Key: Name
+          Value: "MyTable2"
+      Properties:
+        MyColumn1:
+          Type: "VARCHAR(255)"
+          Nullable: "false"
+        MyColumn2:
+          Type: "INT"
+          Nullable: "false"
+        # Ajoutez d'autres colonnes selon vos besoins
