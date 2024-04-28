@@ -1,5 +1,9 @@
 # dofusTrade
 
+Arhitecture template : 
+
+![alt text](architecture.png)
+
 
 ## Prerequisites
 
