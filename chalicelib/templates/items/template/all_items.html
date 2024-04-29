@@ -12,7 +12,7 @@
     {% for item in items %}
     <tbody>
         <tr>
-          <th scope="row">{{ item.ankama_id }}</th>
+          <th scope="row"><img src="{{item.image_urls.icon}}"></th>
           <td>{{ item.name }}</td>
           <td>{{ item.type }}</td>
           <td>Lvl: {{ item.level }}</td>

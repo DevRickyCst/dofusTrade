@@ -30,6 +30,7 @@ def return_equipments(id=None):
             context["item"]= data
         else:
             data = api_instance.get_items_equipment_list(language, game)
+            print(data.items[0].to_json())
             listedItems = ItemsListPaged.from_dict(data)
             context["items"]= listedItems.items
     return return_render_html_file(context)
