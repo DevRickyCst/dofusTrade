@@ -1,19 +1,15 @@
-from chalice import Chalice, Response
-import os
-import jinja2
-import dofusdude
+from chalice import Chalice
 
-
+from chalicelib.blueprints.items_blueprints import items_routes
+from chalicelib.utils.jinja2 import return_render_html_file
 
 app = Chalice(app_name="dofusTrade")
 
-# Render template with jinja2 templating 
-def render(tpl_path, context={}):
-    path, filename = os.path.split(tpl_path)
-    return jinja2.Environment(loader=jinja2.FileSystemLoader(path or      "./")).get_template(filename).render(context)
-
+app.register_blueprint(items_routes)
 
 @app.route("/", methods=["GET"])
 def index():
-    template = render("chalicelib/templates/base.html")
-    return Response(template, status_code=200, headers={"Content-Type": "text/html", "Access-Control-Allow-Origin": "*"})
+    return return_render_html_file()
+
+
+
