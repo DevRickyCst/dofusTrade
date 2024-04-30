@@ -1,0 +1,33 @@
+body{
+    background-color: #212529;
+}
+
+.app_div{
+    width: 80%;
+    margin: auto;
+    padding: 1em;
+    background-color: rgb(255, 255, 255);
+    border-radius: 30px;
+}
+.app_div .title{
+    text-align: center;
+    padding: 1em;
+}
+.navbar{
+    padding: 0% 5%;
+    margin-bottom: 2em;
+    height: 4em;
+    background-color: rgb(15, 25, 48);
+}
+
+.navbar .home_link{
+    padding: 0% 2%;
+}
+
+.navbar li{
+    margin: 0% 4%;
+}
+
+.home_link, .nav-link {
+    color: white;
+}

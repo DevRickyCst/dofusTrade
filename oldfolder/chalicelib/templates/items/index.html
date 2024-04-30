@@ -1,0 +1,11 @@
+
+    <h1 class="title"> Liste des {{ item_type.capitalize() }}</h1>
+
+    {% if item_type is iterable %}
+        {% include "items/template/all_items.html" %}
+    {% endif %}
+
+
+
+
+
