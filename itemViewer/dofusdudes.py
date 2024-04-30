@@ -4,8 +4,9 @@ configuration = dofusdude.Configuration(host="https://api.dofusdu.de")
 
 
 class DofusDudeAPI:
-
+    '''This class is mean to make dofusdude usage easier'''
     def __init__(self, items_type: str) -> None:
+        ''' Init dofusdude api according to the string input'''
         self.items_type = items_type
 
         with dofusdude.ApiClient(configuration) as api_client:
@@ -29,8 +30,7 @@ class DofusDudeAPI:
         lvl_min: int = 1,
         lvl_max: int = 200
     ):
-        print(language, game, page_number, page_size, lvl_min, lvl_max)
-        print("calling get item list")
+        '''Get item list according to the __init__ api'''
         with dofusdude.ApiClient(configuration) as api_client:
             if self.items_type == "equipments":
                 return self.api.get_items_equipment_list(
@@ -73,11 +73,11 @@ class DofusDudeAPI:
 
     def get_item_single(
         self,
-        ankama_id,
+        ankama_id: int,
         language: str = "fr",
         game: str = "dofus2",
     ):
-        print("calling get item_single")
+        '''Get single item according to the __init__ api'''
         with dofusdude.ApiClient(configuration) as api_client:
             if self.items_type == "equipments":
                 return self.api.get_items_equipment_single(
