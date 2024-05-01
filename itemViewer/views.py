@@ -5,7 +5,9 @@ from django.urls import resolve
 
 app_name = "item"
 
-context = {"app": app_name}
+context = {
+    "app": app_name
+}
 
 tab_var = {
     "page_number": 1,
@@ -39,11 +41,11 @@ def get_and_render_all_items(request):
     data = api.get_item_list(**tab_var)
     listedItems = ItemsListPaged.from_dict(data)
 
-    context = {
+    context.update({
         'item_type': item_type,
         'items': listedItems.items,
         'tab_var': tab_var,
-    }
+    })
     return render(request, "all_items.html", context=context)
 
 
@@ -55,8 +57,8 @@ def get_and_render_single_item(request, id):
     # Init client
     api = DofusDudeAPI(item_type)
     data = api.get_item_single(ankama_id=id)
-    context = {
+    context.update({
         'item_type': item_type,
         'item': data
-    }    
+    })
     return render(request, "solo_item.html", context=context)
