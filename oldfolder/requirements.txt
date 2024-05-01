@@ -1,4 +1,0 @@
-chalice==1.31.0
-dofusdude
-black
-jinja2
