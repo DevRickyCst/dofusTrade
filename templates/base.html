@@ -18,6 +18,75 @@
     </div>
 
 
+  <!-- Login modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="loginModalLabel">Se connecter à Dofus Trade</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form id="loginForm" method="post">
+                  {% csrf_token %}
+                  <!-- Ajoute un champ de formulaire caché pour le nom de la page actuelle -->
+                  <input type="hidden" id="currentPage" name="current_page" value="{{ request.path }}">
+                  <div class="mb-3">
+                      <label for="username" class="form-label">Pseudo</label>
+                      <input type="text" class="form-control" id="username" name="username" required>
+                  </div>
+                  <div class="mb-3">
+                      <label for="password" class="form-label">Mot de passe</label>
+                      <input type="password" class="form-control" id="password" name="password" required>
+                      <span id="passwordError" class="text-danger" style="display: none;">Mot de passe incorrect</span>
+                    </div>
+                  <button type="submit" class="btn btn-primary">Se connecter</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<script>
+  // Attends que le document soit prêt
+  $(document).ready(function() {
+      // Écoute l'événement de soumission du formulaire
+      $('#loginForm').submit(function(e) {
+          e.preventDefault(); // Empêche la soumission par défaut du formulaire
+          
+          // Récupère les données du formulaire
+          var formData = $(this).serialize();
+          
+          // Envoie les données du formulaire au serveur
+          $.ajax({
+              type: 'POST',
+              url: '/log/login',
+              data: formData,
+              success: function(response) {
+              // Vérifie le contenu de la réponse
+              if (response['200'] === 'ok') {
+                  // Si la réponse indique une connexion réussie
+                  console.log('Connexion réussie!');
+                  window.location.href = '/';              
+              } else {
+                  // Si la réponse indique une erreur de connexion
+                  console.log('Erreur de connexion:', response['200']);
+                  $('#passwordError').show();
+                  // Affiche un message d'erreur ou effectue toute autre action nécessaire
+              }
+                // Affiche la réponse dans la console
+                console.log('Réponse du serveur:', response);
+              },
+              error: function(xhr, status, error) {
+                  // Affiche l'erreur dans la console
+                  console.error('Erreur de requête AJAX:', error);
+              }
+          });
+      });
+  });
+</script>
+
 </body>
 </html>
 
