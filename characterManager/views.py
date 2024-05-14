@@ -10,5 +10,5 @@ def index(request):
         print("User ID:", user_id)
         # Alternatively, you can return the user ID in an HttpResponse
         user_id = request.user.id
-        
-    return render(request, "index.html", context = {})
+
+    return render(request, "perso.html", context = {})

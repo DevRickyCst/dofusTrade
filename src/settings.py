@@ -137,8 +137,7 @@ SASS_PROCESSOR_ROOT = STATIC_ROOT
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
-
+'''
 # Logging configuration 
 LOGGING = {
     'version': 1,
@@ -175,4 +174,4 @@ LOGGING = {
             'propagate': True,
         },
     }
-}
+}'''
