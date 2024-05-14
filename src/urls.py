@@ -7,4 +7,6 @@ urlpatterns = [
     path("items/", include("itemViewer.urls")),
     path("log/", include("registration.urls")),
     path("", views.index, name="index"),
+    path("personnages/", include("characterManager.urls")),
+
 ]
