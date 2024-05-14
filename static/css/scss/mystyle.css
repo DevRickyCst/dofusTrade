@@ -1,4 +1,27 @@
 @charset "UTF-8";
+.character-info .label {
+  font-style: bold; }
+
+.character-info .pseudo {
+  margin-bottom: 0.5em; }
+
+.character-info .label {
+  font-weight: bold; }
+
+.character-info .value {
+  font-size: 24px; }
+
+.personnage-menu {
+  margin-top: 2em; }
+
+.caracteristiques-div img {
+  margin-right: 0.5em; }
+
+.pano-div button {
+  display: block;
+  margin: auto;
+  margin-bottom: 2em; }
+
 .charactere-btn {
   position: fixed;
   bottom: 50px;
@@ -42,15 +65,22 @@
 
 .nav-link {
   font-size: 24px;
-  color: #F7F6CF; }
+  color: #F7F6CF;
+  text-shadow: 1px 1px 10px black; }
+
+.nav-link:hover {
+  color: #9AC8EB; }
 
 .title-navbar-expand {
   display: block;
-  width: 75%; }
+  width: 75%;
+  text-shadow: 0 0 4px #063266, 0 0 4px #063266, 0 0 4px #063266, 0 0 4px #063266; }
 
 .div-nav-bar {
   background-image: url("../../image/dofus-background.jpeg");
-  background-size: cover;
+  background-size: cover; }
+
+.expend {
   height: 600px;
   margin-bottom: 200px; }
 
@@ -68,11 +98,12 @@
   height: 15em;
   margin: auto;
   background-color: #9AC8EB;
-  border-radius: 30px;
-  padding: 1em; }
+  border-radius: 15px;
+  padding: 1em;
+  box-shadow: 0px 0px 4em black, 1px 0px #9AC8EB, 0px 1px #9AC8EB, -1px 0px #9AC8EB, 0px -1px #9AC8EB; }
 
 .search_div div {
-  width: 50%;
+  width: 80%;
   margin: auto;
   padding: 1em;
   text-align: center; }
@@ -82,11 +113,23 @@
   color: #063266;
   margin-bottom: 1em; }
 
+.form-control[type="navbar-search"] {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+  border-radius: 45px; }
+  .form-control[type="navbar-search"]:focus {
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.5); }
+
 #charactereModal tr img {
   width: 75px; }
 
 #charactereModal td {
   vertical-align: middle; }
+
+#charactereModal #title {
+  font-family: "Jacques Francois Shadow", serif; }
 
 body {
   background-color: #F7F6CF; }
@@ -96,8 +139,7 @@ body {
   margin: auto;
   padding: 1em;
   background-color: white;
-  border-radius: 30px;
-  color: #b87333; }
+  border-radius: 30px; }
 
 .app_div .title {
   text-align: center;

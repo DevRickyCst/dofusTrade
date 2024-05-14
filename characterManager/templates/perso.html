@@ -4,9 +4,28 @@
 
 
 
+<div class="character-div row">
+    <div class="left col-3">
+        <img src="{{ character.character_class.logo_url }}">
+    </div>
+    <div class="character-info col-9">
+        <h1 class="pseudo">{{ character.name|title }}</h1>
+        <div class="info-item">
+            <span class="label">Lvl :</span>
+            <span class="value">{{ character.level }}</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Server :</span>
+            <span class="value">{{ character.server|title  }}</span>
+        </div>
 
+        <div class="personnage-menu">
 
+            {% include 'menu/charac.html' %}
 
+        </div>
+    </div>
+</div>
 
 
 

@@ -6,7 +6,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Personnage</h5>
+          <h5 class="modal-title" id="title">Personnage</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -21,9 +21,10 @@
                 </thead>
                 <tbody>
                     {% for charactere in characteres%}
-                    {{ characteres}}
                       <tr>
-                        <td><img src="{{ charactere.character_class.logo_url }}">{{ charactere.character_class.logo_url }}</td>
+                        <td><a href="/personnages/{{charactere.id}}">
+                          <img src="{{ charactere.character_class.logo_url }}">
+                        </a></td>
                         <td>{{ charactere.name }}</td>
                         <td>{{ charactere.level }}</td>
                         <td>{{ charactere.server }}</td>
