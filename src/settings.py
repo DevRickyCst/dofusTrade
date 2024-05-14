@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "characterManager",
     'sass_processor',
     "itemViewer",
     "registration",
@@ -139,7 +140,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Logging configuration 
-"""
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -175,4 +175,4 @@ LOGGING = {
             'propagate': True,
         },
     }
-}"""
+}

@@ -3,15 +3,32 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Personnage</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Pseudo</th>
+                    <th scope="col">Lvl</th>
+                    <th scope="col">Serveur</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for charactere in characteres%}
+                      <tr>
+                        <td>{{ charactere.name }}</td>
+                        <td>{{ charactere.level }}</td>
+                        <td>{{ charactere.server }}</td>
+                      </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+        <a href="/personnages"> 
+          <button type="button" class="btn btn-primary" >Afficher tous les personnages</button></a>
         </div>
       </div>
     </div>
