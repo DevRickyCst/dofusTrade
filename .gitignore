@@ -1,3 +1,7 @@
+*.css
+*.ipynb
+
+
 # Django #
 *.log
 *.pot

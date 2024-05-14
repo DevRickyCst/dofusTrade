@@ -1,5 +1,5 @@
-from django.shortcuts import render
-
+from src.custumRender import render
 
 def index(request):
-    return render(request, "index.html")
+    print('page view')
+    return render(request, "index.html", context={"navbar":'expend'})

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    {% load static %}
 
     {% include 'import.html' %}
 
@@ -20,10 +21,10 @@
 
   <!-- Login modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
           <div class="modal-header">
-              <h1 class="modal-title fs-5" id="loginModalLabel">Se connecter à Dofus Trade</h1>
+              <h1 class="modal-title fs-5" id="loginModalLabel">  <img class="logo_login" src="{% static 'logo/logo.png' %}">Se connecter à Dofus Trade</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -38,7 +39,7 @@
                   <div class="mb-3">
                       <label for="password" class="form-label">Mot de passe</label>
                       <input type="password" class="form-control" id="password" name="password" required>
-                      <span id="passwordError" class="text-danger" style="display: none;">Mot de passe incorrect</span>
+                      <span id="passwordError" class="text-danger" style="display: none;">Pseudo et/ou mot de passe incorrect.</span>
                     </div>
                   <button type="submit" class="btn btn-primary">Se connecter</button>
               </form>
@@ -71,7 +72,7 @@
                   window.location.href = '/';              
               } else {
                   // Si la réponse indique une erreur de connexion
-                  console.log('Erreur de connexion:', response['200']);
+                  console.log('Erreur de connexion:', response['401']);
                   $('#passwordError').show();
                   // Affiche un message d'erreur ou effectue toute autre action nécessaire
               }

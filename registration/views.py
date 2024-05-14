@@ -18,7 +18,7 @@ def login_view(request):
                 data
             )  # Redirige vers la page de tableau de bord après la connexion réussie
         else:
-            data = {200: "pas ok"}
+            data = {401: "pas ok"}
             return JsonResponse(data)
 
     return redirect(f"/{get_current_route}")
