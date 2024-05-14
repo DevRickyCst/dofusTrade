@@ -21,9 +21,8 @@
                 </thead>
                 <tbody>
                     {% for charactere in characteres%}
-                    {{ characteres}}
                       <tr>
-                        <td><img src="{{ charactere.character_class.logo_url }}">{{ charactere.character_class.logo_url }}</td>
+                        <td><img src="{{ charactere.character_class.logo_url }}"></td>
                         <td>{{ charactere.name }}</td>
                         <td>{{ charactere.level }}</td>
                         <td>{{ charactere.server }}</td>

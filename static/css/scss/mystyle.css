@@ -82,6 +82,12 @@
   color: #063266;
   margin-bottom: 1em; }
 
+#charactereModal tr img {
+  width: 75px; }
+
+#charactereModal td {
+  vertical-align: middle; }
+
 body {
   background-color: #F7F6CF; }
 
