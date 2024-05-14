@@ -1,0 +1,71 @@
+.navbar {
+  padding: 0% 5%;
+  margin-bottom: 2em; }
+
+.navbar .home_link {
+  padding: 0 2em; }
+
+.navbar li {
+  margin: 0% 4%; }
+
+.navbar .logo {
+  width: 140px;
+  height: 140px;
+  margin-right: -50px; }
+
+.nav-link {
+  font-size: 32px;
+  color: #F7F6CF; }
+
+.container-fluid {
+  margin-top: -400px;
+  margin-left: -50px; }
+
+.with-background {
+  background-image: url("../image/dofus-background.jpeg");
+  background-size: cover;
+  height: 600px; }
+
+body {
+  background-color: #F7F6CF; }
+
+.app_div {
+  width: 70%;
+  margin: auto;
+  padding: 1em;
+  background-color: white;
+  border-radius: 30px;
+  color: #b87333; }
+
+.app_div .title {
+  text-align: center;
+  padding: 1em; }
+
+.form {
+  width: 80%;
+  text-align: center; }
+
+.logo_login {
+  height: 100px;
+  width: 100px;
+  margin: 0 1em; }
+
+.filter_form {
+  margin: auto;
+  padding: 3em 0;
+  border-radius: 30px;
+  text-align: center;
+  color: white; }
+
+.filter_form label, button {
+  margin-top: 1em; }
+
+.filter_form .navigation {
+  text-align: center; }
+
+.form_div {
+  background-color: #b87333;
+  border-radius: 30px;
+  height: fit-content; }
+
+/*# sourceMappingURL=mystyle.css.map */
