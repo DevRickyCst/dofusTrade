@@ -20,7 +20,8 @@
 
 .title-navbar-expand {
   display: block;
-  width: 75%; }
+  width: 75%;
+  text-shadow: 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black; }
 
 .div-nav-bar {
   background-image: url("../../image/dofus-background.jpeg");
