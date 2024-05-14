@@ -1,6 +1,6 @@
 import logging
 from django.shortcuts import render as django_render
-from characterManager.models import Character
+from characterManager.models import Character, CharacterClass
 
 logger = logging.getLogger(__name__)
 
@@ -11,11 +11,12 @@ def render(request, *args, **kwargs):
 
     if request.user.is_authenticated:
 
-        characteres = Character.objects.filter(user_id=request.user).values()
-        print(characteres)
+        characters = Character.objects.filter(user_id=request.user).prefetch_related('character_class')
+        characters_data = characters.values('id', 'name', 'character_class__name')
+        print(characters)
 
         # Add the new key-value pair to the inner dictionary
-        kwargs["context"]["characteres"] = characteres
+        kwargs["context"]["characteres"] = characters
 
 
     logger.debug(f"Rendering template : {template} with context #{context}")
