@@ -27,6 +27,7 @@ media
 # Generated files
 .idea/**/contentModel.xml
 static/css/scss/mystyle.css
+static/css/scss/mystyle.css.map
 
 # Sensitive or high-churn files
 .idea/**/dataSources/

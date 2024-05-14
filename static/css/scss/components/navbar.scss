@@ -22,11 +22,18 @@
 .nav-link {
     font-size: 24px;
     color: $y-color;
+    @include clickable-text;
+}
+
+.nav-link:hover {
+    color: $lb-color;
 }
 
 .title-navbar-expand {
     display: block;
     width: 75%;
+    @include main-title-outline;
+
 }
 .div-nav-bar {
     background-image: url("../../image/dofus-background.jpeg");

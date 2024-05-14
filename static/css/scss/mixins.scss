@@ -1,0 +1,7 @@
+@mixin main-title-outline {
+    text-shadow: 0 0 4px $db-color, 0 0 4px $db-color, 0 0 4px $db-color, 0 0 4px $db-color;
+}
+
+@mixin clickable-text {
+    text-shadow: 1px 1px 10px black,
+}
