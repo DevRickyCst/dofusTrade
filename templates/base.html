@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    {% load static %}
 
     {% include 'import.html' %}
 
@@ -18,35 +17,14 @@
         {% endblock %}
     </div>
 
+  {% if user.is_authenticated %}
+    <button class="charactere-btn" data-bs-toggle="modal" data-bs-target="#charactereModal">
+        Personnages
+    </button>
+  {% endif %}
 
-  <!-- Login modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h1 class="modal-title fs-5" id="loginModalLabel">  <img class="logo_login" src="{% static 'logo/logo.png' %}">Se connecter à Dofus Trade</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <form id="loginForm" method="post">
-                  {% csrf_token %}
-                  <!-- Ajoute un champ de formulaire caché pour le nom de la page actuelle -->
-                  <input type="hidden" id="currentPage" name="current_page" value="{{ request.path }}">
-                  <div class="mb-3">
-                      <label for="username" class="form-label">Pseudo</label>
-                      <input type="text" class="form-control" id="username" name="username" required>
-                  </div>
-                  <div class="mb-3">
-                      <label for="password" class="form-label">Mot de passe</label>
-                      <input type="password" class="form-control" id="password" name="password" required>
-                      <span id="passwordError" class="text-danger" style="display: none;">Pseudo et/ou mot de passe incorrect.</span>
-                    </div>
-                  <button type="submit" class="btn btn-primary">Se connecter</button>
-              </form>
-          </div>
-      </div>
-  </div>
-</div>
+  {% include 'modals/login.html' %}
+  {% include 'modals/personnage.html' %}
 
 
 <script>
