@@ -2,9 +2,9 @@ import json
 
 from django.contrib.auth.models import User
 from django.db import models
-
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 
 class Server(models.Model):
     """
@@ -49,11 +49,15 @@ class Character(models.Model):
     level = models.IntegerField(default=200)
     # Represents the server of the character.
     default_server = Server.objects.first()
-    server = models.ForeignKey(Server, on_delete=models.PROTECT, default=default_server)
+    server = models.ForeignKey(
+        Server, on_delete=models.PROTECT, default=default_server
+    )
     # Represents the Class of the character.
     default_character_class = CharacterClass.objects.first()
     character_class = models.ForeignKey(
-        CharacterClass, on_delete=models.CASCADE,  default=default_character_class
+        CharacterClass,
+        on_delete=models.CASCADE,
+        default=default_character_class,
     )
     # Represents the user who created the character.
     user = models.ForeignKey(User, on_delete=models.CASCADE)

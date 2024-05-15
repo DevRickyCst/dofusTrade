@@ -18,7 +18,7 @@ def view_personnages(request, id=None):
         main_character = Character.objects.first()
         # Create a character if not exist
         if main_character is None:
-            main_character = Character(name='Mon premier perso', user=user)
+            main_character = Character(name="Mon premier perso", user=user)
             main_character.save()
 
     # Get character associated id
