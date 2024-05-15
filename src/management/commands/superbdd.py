@@ -62,29 +62,48 @@ class Command(BaseCommand):
                 print("Exception when calling ConsumablesApi->get_items_consumables_list: %s\n" % e)
 
 
-                """
-            # Enter a context with an instance of the API client
-            with dofusdude.ApiClient(configuration) as api_client:
-            # Create an instance of the API class
-            api_instance = dofusdude.AlmanaxApi(api_client)
-            language = 'fr' # str | code
-            var_date = date.today() # date | yyyy-mm-dd
 
-            try:
-                # Single Almanax Date
-                api_response = api_instance.get_almanax_date(language, var_date)
-                print("The response of AlmanaxApi->get_almanax_date:\n")
-                pprint(api_response)
-            except ApiException as e:
-                print("Exception when calling AlmanaxApi->get_almanax_date: %s\n" % e)
-            """
 
-            """payload = {'page_size': '10', 'filter_max_level' : 2}
-            #r = requests.get('https://api.dofusdu.de/dofus2/fr/items/consumables/', params=payload)
-            r = requests.get('https://api.dofusdu.de/dofus2/fr/items/consumables?page-number=1&page-size=16')
 
-            print(r.status_code)
-            jsonResponse = json.loads(r.content)
-            jsonReadable = json.dumps(jsonResponse, indent=2)
-            print(len(jsonResponse["items"][0]))
-            print(jsonReadable)"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    """
+# Enter a context with an instance of the API client
+with dofusdude.ApiClient(configuration) as api_client:
+# Create an instance of the API class
+api_instance = dofusdude.AlmanaxApi(api_client)
+language = 'fr' # str | code
+var_date = date.today() # date | yyyy-mm-dd
+
+try:
+    # Single Almanax Date
+    api_response = api_instance.get_almanax_date(language, var_date)
+    print("The response of AlmanaxApi->get_almanax_date:\n")
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling AlmanaxApi->get_almanax_date: %s\n" % e)
+"""
+
+"""payload = {'page_size': '10', 'filter_max_level' : 2}
+#r = requests.get('https://api.dofusdu.de/dofus2/fr/items/consumables/', params=payload)
+r = requests.get('https://api.dofusdu.de/dofus2/fr/items/consumables?page-number=1&page-size=16')
+
+print(r.status_code)
+jsonResponse = json.loads(r.content)
+jsonReadable = json.dumps(jsonResponse, indent=2)
+print(len(jsonResponse["items"][0]))
+print(jsonReadable)"""
