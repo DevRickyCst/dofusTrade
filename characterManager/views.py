@@ -99,16 +99,17 @@ def add_character(request):
                     level=200,
                     server=None,
                     character_class=character_class,
-                    user_id=user,
+                    user=user,
                 )
 
                 charac.save()
 
-                characSet = CaracteristiqueSetClass(character_id=charac)
+                characSet = CaracteristiqueSetClass(user= user, character_id=charac)
 
                 characSet.save()
                 print(charac.id)
 
                 return JsonResponse({"id": charac.id})
-            except:
+            except Exception as e:
+                print(e)
                 return JsonResponse({"404": "not ok"})

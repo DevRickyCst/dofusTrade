@@ -74,8 +74,6 @@ class CaracteristiqueSetClass(models.Model):
     # Represents the user who created the caracteristique set.
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # Represents the user who created the caracteristique set.
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # Represents the user who created the caracteristique set.
     character_id = models.ForeignKey(Character, on_delete=models.CASCADE)
     # Value of vitalite
     vitalite = models.IntegerField(default=0)
