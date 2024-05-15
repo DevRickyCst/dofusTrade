@@ -32,5 +32,3 @@ class Command(BaseCommand):
         for personnage in PERSONNAGE_CLASS_LIST:
             perso = CharacterClass(name= personnage, logo_url= f'static/image/logo_personnage/{personnage}.png')
             perso.save()
-        # Your custom script logic here
-        self.stdout.write(f'hello')
