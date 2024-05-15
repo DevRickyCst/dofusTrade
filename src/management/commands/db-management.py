@@ -12,6 +12,7 @@ from django.core.management.base import BaseCommand, CommandError
 # See configuration.py for a list of all supported configuration parameters.
 class Command(BaseCommand):
     help = "Fill Bdd with consumables"
+    added_items_count = 0
 
     def add_arguments(self, parser):
         #nothing
@@ -26,7 +27,6 @@ class Command(BaseCommand):
         #Flushing previous entries in db
         all_bdd_items = Item.objects.all()
         deleted_items_count = 0
-        added_items_count = 0
         print("Found " + all_bdd_items.count().__str__() + " entries in db")
         if all_bdd_items.count() != 0:
             for bdd_item in all_bdd_items:
@@ -34,6 +34,11 @@ class Command(BaseCommand):
                 deleted_items_count += 1
         print("Deleted " + deleted_items_count.__str__() + " entries in db")
 
+        self.call_consumables_api(configuration)
+
+    #Calls the consumables API, fetch all consumables and add them to bd with field categorie set as "consumable"
+    def call_consumables_api(self, configuration):
+        added_consumables = 0
         with dofusdude.ApiClient(configuration) as api_client:
         # Create an instance of the API class
             api_instance = dofusdude.ConsumablesApi(api_client)
@@ -48,20 +53,22 @@ class Command(BaseCommand):
                 # Consumables endpoint
                 api_response = api_instance.get_items_consumables_list(language, game, sort_level=sort_level, page_size=page_size, page_number=page_number).to_json()
                 json_response = json.loads(api_response)
-                print("The response of ConsumablesApi->get_items_consumables_list: " + len(json_response["items"]).__str__() + " consumables\n")
+                print("The response of ConsumablesApi->get_items_consumables_list contains " + len(json_response["items"]).__str__() + " consumables\n")
                 for item in json_response['items'] :
-                    i = Item(ankama_id= item['ankama_id'], name=['name'])
-                    i.type = item['type']['name']
-                    i.level = item['level']
-                    i.image_urls = item['image_urls']
+                    i = Item(
+                        ankama_id= item['ankama_id'],
+                        name=['name'],
+                        type = item['type']['name'],
+                        level = item['level'],
+                        image_urls = item['image_urls'],
+                        )
                     i.categorie = "consumables"
                     i.save()
-                    added_items_count += 1
-                print("Added " + added_items_count.__str__() + " entries to db")
+                    self.added_items_count += 1
+                    added_consumables += 1
+                print("Added " + added_consumables.__str__() + " consumables to db")
             except Exception as e:
                 print("Exception when calling ConsumablesApi->get_items_consumables_list: %s\n" % e)
-
-
 
 
 
