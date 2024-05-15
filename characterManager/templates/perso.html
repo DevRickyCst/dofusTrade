@@ -5,10 +5,18 @@
 
 
 <div class="character-div row">
+    <div class = "character-selection-div col-1">
+        {% for charac in other_charact %}
+            <a href="/personnages/{{charac.id}}">
+                <img class="img-other-charac" src="{{ charac.character_class__logo_url }}" alt="">
+            </a>
+            <p class="other-charac-name">{{charac.name}}</p>
+        {% endfor%}
+    </div>
     <div class="left col-3">
         <img src="{{ character.character_class.logo_url }}">
     </div>
-    <div class="character-info col-9">
+    <div class="character-info col-8">
         <h1 class="pseudo">{{ character.name|title }}</h1>
         <div class="info-item">
             <span class="label">Lvl :</span>

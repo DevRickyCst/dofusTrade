@@ -20,7 +20,19 @@
 .pano-div button {
   display: block;
   margin: auto;
-  margin-bottom: 2em; }
+  margin-bottom: 2em;
+  width: 80px;
+  height: 80px; }
+
+.character-selection-div .img-other-charac {
+  height: 80px; }
+
+.character-selection-div .other-charac-name {
+  text-align: center; }
+
+.caracteristiques-div button {
+  display: block;
+  margin: auto; }
 
 .charactere-btn {
   position: fixed;
@@ -139,7 +151,8 @@ body {
   margin: auto;
   padding: 1em;
   background-color: white;
-  border-radius: 30px; }
+  border-radius: 30px;
+  padding-bottom: 250px; }
 
 .app_div .title {
   text-align: center;
