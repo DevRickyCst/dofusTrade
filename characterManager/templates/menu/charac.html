@@ -1,22 +1,4 @@
 <div class="row">
-    <div class="col-4 caracteristiques-div">
-        <form id="characSetForm" method="post">
-        {% csrf_token %}
-        <h4 class="title">Caractéristiques</h4>
-        <table class="table">
-            <tbody>
-                {% for caracteristique, value in caracteristiques.items %}
-                    <tr>
-                        <td><img src="/static/image/logo_charac/{{caracteristique}}.png">{{caracteristique|title}}</td>
-                        <td><input type="number" name="{{caracteristique}}" min="1" max="1000" value= "{{value}}"/></td>
-                    </tr>
-                {%endfor%}
-            </tbody>
-            <input class="d-none" name="character_id" value="{{character.id}}"/>
-        </table>
-            <button type="submit" id="carac-save-btn" class="btn btn-primary mb-2">Modifier</button>
-        </form>
-    </div>
     
         {% include 'menu/pano.html' %}
 </div>
@@ -25,42 +7,3 @@
 
 
 
-
-<script>
-  // Attends que le document soit prêt
-  $(document).ready(function() {
-      // Écoute l'événement de soumission du formulaire
-      $('#characSetForm').submit(function(e) {
-          e.preventDefault(); // Empêche la soumission par défaut du formulaire
-          
-          // Récupère les données du formulaire
-          var formData = $(this).serialize();
-          
-          // Envoie les données du formulaire au serveur
-          $.ajax({
-              type: 'POST',
-              url: '/personnages/updateCaracSet',
-              data: formData,
-              success: function(response) {
-              // Vérifie le contenu de la réponse
-              if (response['200'] === 'ok') {
-                  // Si la réponse indique une connexion réussie
-                  console.log('Connexion réussie!');
-                  window.location.href = '/';              
-              } else {
-                  // Si la réponse indique une erreur de connexion
-                  console.log('Erreur de connexion:', response['401']);
-                  $('#passwordError').show();
-                  // Affiche un message d'erreur ou effectue toute autre action nécessaire
-              }
-                // Affiche la réponse dans la console
-                console.log('Réponse du serveur:', response);
-              },
-              error: function(xhr, status, error) {
-                  // Affiche l'erreur dans la console
-                  console.error('Erreur de requête AJAX:', error);
-              }
-          });
-      });
-  });
-</script>

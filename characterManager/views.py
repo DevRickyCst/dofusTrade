@@ -1,6 +1,9 @@
 from src.custumRender import render
-from .models import Character, CaracteristiqueSetClass
+from .models import Character, CaracteristiqueSetClass, CharacterClass
+from django.contrib.auth.models import User
 from django.http import JsonResponse
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 def view_personnages(request, id = None):
@@ -63,3 +66,37 @@ def update_carac_set(request):
             return JsonResponse({
                 '403': 'Pas ok'
             })
+        
+def add_character(request):
+    if (request.user.is_authenticated) & (request.method == "POST"):
+
+        user = User.objects.filter(pk=request.user.id).first()
+
+        user_nb_character = Character.objects.filter(user_id=user).count()
+
+        print(user_nb_character)
+        if user_nb_character >= 5:
+            return JsonResponse({'404': 'not ok'})
+        character_class = CharacterClass.objects.filter(pk=1).first()  # Get the character class by its ID
+
+        print(character_class)
+        if character_class and user:
+            charac = Character(
+                name = 'New Perso',
+                level = 200,
+                server = 'test',
+                character_class = character_class,
+                user_id = user
+            )
+
+            charac.save()
+
+            characSet = CaracteristiqueSetClass(
+                character_id = charac
+            )
+
+            characSet.save()
+            print(charac.id)
+    
+            return JsonResponse({'id':charac.id})
+

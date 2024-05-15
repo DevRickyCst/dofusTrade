@@ -27,6 +27,10 @@
 .character-selection-div .img-other-charac {
   height: 80px; }
 
+.character-selection-div .add-perso {
+  height: 80px;
+  color: green; }
+
 .character-selection-div .other-charac-name {
   text-align: center; }
 
