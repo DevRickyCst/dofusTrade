@@ -129,15 +129,15 @@ class Command(BaseCommand):
                     page_size=page_size,
                     page_number=page_number,
                 )
-            
+
     def insert_in_Item_Table(self, item):
         i = Item(
-                ankama_id=item["ankama_id"],
-                name=item["name"],
-                type=item["type"]["name"],
-                level=item["level"],
-                image_urls=item["image_urls"],
-            )
+            ankama_id=item["ankama_id"],
+            name=item["name"],
+            type=item["type"]["name"],
+            level=item["level"],
+            image_urls=item["image_urls"],
+        )
         i.categorie = "consumables"
         i.save()
         self.added_items_count += 1
