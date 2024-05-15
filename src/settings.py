@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "src",
     "itemViewer",
     "registration",
+    "src"
 ]
 
 MIDDLEWARE = [
