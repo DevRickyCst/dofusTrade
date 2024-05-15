@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'sass_processor',
     "itemViewer",
     "registration",
+    "src"
 ]
 
 MIDDLEWARE = [
