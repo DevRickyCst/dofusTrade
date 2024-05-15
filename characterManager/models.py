@@ -10,8 +10,9 @@ class Server(models.Model):
     This model stores information about a Server.
     '''
     # Represents the name of the class.
-    name = models.CharField(max_length=100)
-
+    name = models.CharField(max_length=100, unique=True)
+    def __str__(self) :
+        return "id: " + self.id.__str__() + ", name : " + self.name
 
 class CharacterClass(models.Model):
     """
@@ -20,7 +21,7 @@ class CharacterClass(models.Model):
     This model stores information about a class.
     """
     # Represents the name of the class.
-    name = models.CharField(max_length=100, default="random")
+    name = models.CharField(max_length=100, default="random", unique=True)
     # Represents the path to the class logo.
     logo_url = models.CharField(max_length=100, default="random")
 
