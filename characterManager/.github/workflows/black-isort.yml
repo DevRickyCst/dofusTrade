@@ -1,29 +1,20 @@
-name: CI - Black and Isort
+name: black
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
       with:
-        python-version: '3.9' # Specify the Python version you are using
-
+        python-version: "3.10"
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install black isort
-
-    - name: Run Black
+        pip install $(grep black requirement-dev.txt)
+    - name: Analysing the code with black
       run: |
-        black --check .
-
-    - name: Run Isort
-      run: |
-        isort --check-only .
+        black $(git ls-files '*.py') --check
