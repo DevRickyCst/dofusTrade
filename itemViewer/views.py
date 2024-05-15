@@ -1,7 +1,8 @@
-from src.custumRender import render
-from itemViewer.dofusdudes import DofusDudeAPI
 from django.urls import resolve
+
+from itemViewer.dofusdudes import DofusDudeAPI
 from itemViewer.models import Item
+from src.custumRender import render
 
 app_name = "item"
 

@@ -1,5 +1,7 @@
 import logging
+
 from django.shortcuts import render as django_render
+
 from characterManager.models import Character, CharacterClass
 
 logger = logging.getLogger(__name__)

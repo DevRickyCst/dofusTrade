@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
-from characterManager.models import CharacterClass, Server
 
+from characterManager.models import CharacterClass, Server
 
 # List od servers
 SERVER_LIST = [

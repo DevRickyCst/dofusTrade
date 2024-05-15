@@ -1,7 +1,7 @@
-from django.db import models
-from django.contrib.auth.models import User
-
 import json
+
+from django.contrib.auth.models import User
+from django.db import models
 
 
 class Server(models.Model):

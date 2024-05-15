@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.urls import resolve
 from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.urls import resolve
 
 
 def login_view(request):

@@ -1,8 +1,10 @@
-from src.custumRender import render
-from .models import Character, CaracteristiqueSetClass, CharacterClass
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
+
+from src.custumRender import render
+
+from .models import CaracteristiqueSetClass, Character, CharacterClass
 
 
 @login_required
