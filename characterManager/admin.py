@@ -1,11 +1,7 @@
 from django.contrib import admin
 
-from characterManager.models import (
-    Character,
-    CharacterClass,
-    CaracteristiqueSetClass,
-    Server,
-)
+from characterManager.models import (CaracteristiqueSetClass, Character,
+                                     CharacterClass, Server)
 
 # Register your models here.
 admin.site.register(Character)
