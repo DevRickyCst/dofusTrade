@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,7 +31,8 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-LOGIN_URL = '/'
+
+LOGIN_URL = "/"
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -123,14 +123,14 @@ USE_TZ = True
 import os
 
 STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'sass_processor.finders.CssFinder',
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "sass_processor.finders.CssFinder",
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
-#DJANGO SASS
+# DJANGO SASS
 SASS_PROCESSOR_ROOT = STATIC_ROOT
 
 
@@ -144,14 +144,16 @@ from django import template
 
 register = template.Library()
 
+
 @register.filter
 def dict_lookup(dictionary, key):
     return dictionary.get(key, None)
 
+
 register.tag("dict_lookup", dict_lookup)
 
 
-'''
+"""
 # Logging configuration 
 LOGGING = {
     'version': 1,
@@ -188,4 +190,4 @@ LOGGING = {
             'propagate': True,
         },
     }
-}'''
+}"""

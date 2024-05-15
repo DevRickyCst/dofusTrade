@@ -1,7 +1,7 @@
-from django.db import models
-from django.contrib.auth.models import User
-
 import json
+
+from django.contrib.auth.models import User
+from django.db import models
 
 
 class Server(models.Model):
@@ -70,6 +70,9 @@ class CaracteristiqueSetClass(models.Model):
 
 
     """
+
+    # Represents the user who created the caracteristique set.
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     # Represents the user who created the caracteristique set.
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # Represents the user who created the caracteristique set.

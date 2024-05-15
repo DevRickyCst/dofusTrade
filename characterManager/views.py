@@ -1,8 +1,10 @@
-from src.custumRender import render
-from .models import Character, CaracteristiqueSetClass, CharacterClass
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
+
+from src.custumRender import render
+
+from .models import CaracteristiqueSetClass, Character, CharacterClass
 
 
 @login_required
@@ -48,7 +50,7 @@ def view_personnages(request, id=None):
 
 
 def update_carac_set(request):
-    '''Update the caracteristique set using POST methods'''
+    """Update the caracteristique set using POST methods"""
     if (request.user.is_authenticated) & (request.method == "POST"):
         try:
             # Create user object
@@ -59,7 +61,7 @@ def update_carac_set(request):
 
             # Get Characteristique set
             charac_set = CaracteristiqueSetClass.objects.filter(
-                character_id=character_id, user= user
+                character_id=character_id, user=user
             ).first()
 
             # Update value
