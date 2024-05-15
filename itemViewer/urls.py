@@ -25,11 +25,14 @@ urlpatterns = [
         name="equipment",
     ),
     path("items/", views.test_item, name="items"),
-
-
-    path("insert_resources", views.insert_resources, name='insert_resources'),
-    path("insert_equipments", views.insert_equipments, name='insert_equipments'),
-    path("insert_cosmetics", views.insert_cosmetics, name='insert_cosmetics'),
-    path("insert_consumables", views.insert_consumables, name='insert_consumables'),
-
+    path("insert_resources", views.insert_resources, name="insert_resources"),
+    path(
+        "insert_equipments", views.insert_equipments, name="insert_equipments"
+    ),
+    path("insert_cosmetics", views.insert_cosmetics, name="insert_cosmetics"),
+    path(
+        "insert_consumables",
+        views.insert_consumables,
+        name="insert_consumables",
+    ),
 ]
