@@ -48,7 +48,6 @@ def get_and_render_all_items(request):
             "tab_var": tab_var,
         }
     )
-    print(context["tab_var"])
     return render(request, "all_items.html", context=context)
 
 
@@ -67,7 +66,6 @@ def get_and_render_single_item(request, id):
 def test_item(request):
 
     hello = list(Item.objects.all().values())
-    print(hello)
     context.update(
         {
             #    'items': hello
@@ -80,7 +78,6 @@ def insert_resources(request):
     api = DofusDudeAPI("resources")
     data = api.get_all_item().items
     for item in data:
-        print(item)
         correct_item = item.to_dict()
         correct_item.update({"categorie":'resources'})
         pk = correct_item.get('ankama_id')
@@ -102,7 +99,7 @@ def insert_equipments(request):
     api = DofusDudeAPI("equipments")
     data = api.get_all_item(maxx=1).items
     for item in data:
-        print(item)
+        print()
         correct_item = item.to_dict()
         correct_item.update({"categorie":'equipments'})
         pk = correct_item.get('ankama_id')

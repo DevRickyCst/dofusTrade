@@ -1,0 +1,42 @@
+{% load static %}
+
+
+<!-- Modal -->
+<div class="modal fade" id="charactereModal" tabindex="-1" aria-labelledby="charactereModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="title">Personnage</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Pseudo</th>
+                    <th scope="col">Lvl</th>
+                    <th scope="col">Serveur</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for charactere in characteres%}
+                      <tr>
+                        <td><a href="/personnages/{{charactere.id}}">
+                          <img src="{{ charactere.character_class.logo_url }}">
+                        </a></td>
+                        <td>{{ charactere.name }}</td>
+                        <td>{{ charactere.level }}</td>
+                        <td>{{ charactere.server }}</td>
+                      </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+        </div>
+        <div class="modal-footer">
+        <a href="/personnages"> 
+          <button type="button" class="btn btn-primary" >Afficher tous les personnages</button></a>
+        </div>
+      </div>
+    </div>
+  </div>

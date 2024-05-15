@@ -7,11 +7,17 @@ class Itemtype(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=20, null=False)
 
+    def __str__(self) :
+        return "id: " + self.id.__str__() + ", name : " + self.name
+
 class Itemset(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=20, null=False)
     equipment_ids = 
     effects = models.JSONField(default=None, null=True)
+
+    def __str__(self) :
+        return "id: " + self.id.__str__() + ", name : " + self.name
 
 class Item(models.Model):
     ankama_id = models.IntegerField(primary_key=True, default=1)
