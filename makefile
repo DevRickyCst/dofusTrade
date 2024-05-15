@@ -3,3 +3,7 @@ local:
 
 import-statics:
 	python manage.py insert_statics
+
+lint:
+	black .
+	isort .

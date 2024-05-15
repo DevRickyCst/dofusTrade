@@ -30,14 +30,16 @@ class Command(BaseCommand):
 
         self.call_equipment_api(configuration)
 
-        #self.call_consumable_api(configuration)
+        self.call_consumable_api(configuration)
 
     # Calls the consumables API, fetch all consumables and add them to bd with field categorie set as "consumable"
     def call_consumable_api(self, configuration):
         added_consumables = 0
         try:
             # Consumables endpoint
-            json_api_response = self.get_API_response(configuration, ApiTypeEnum.CONSUMABLE).to_json()
+            json_api_response = self.get_API_response(
+                configuration, ApiTypeEnum.CONSUMABLE
+            ).to_json()
             json_consumable = json.loads(json_api_response)
             print(
                 "The response of ConsumablesApi->get_items_consumables_list contains "
@@ -57,9 +59,7 @@ class Command(BaseCommand):
                 self.added_items_count += 1
                 added_consumables += 1
             print(
-                "Added "
-                + added_consumables.__str__()
-                + " consumables to db"
+                "Added " + added_consumables.__str__() + " consumables to db"
             )
         except Exception as e:
             print(
@@ -78,7 +78,7 @@ class Command(BaseCommand):
             print("The response of EquipmentApi->get_items_equipment_list:\n")
             # json_response = json.loads("{" + api_response.__str__() + "}")
             for item in api_response.items:
-                #print(item.to_json())
+                # print(item.to_json())
                 json_item = json.loads(item.to_json())
                 i = Item(
                     ankama_id=json_item["ankama_id"],
@@ -91,7 +91,7 @@ class Command(BaseCommand):
                 i.save()
                 added_equipment += 1
             print(added_equipment)
-            #print(json.dumps(json_response, indent=2))
+            # print(json.dumps(json_response, indent=2))
         except Exception as e:
             print(
                 "Exception when calling EquipmentApi->get_items_equipment_list: %s\n"
@@ -139,12 +139,12 @@ class Command(BaseCommand):
             if api_type == ApiTypeEnum.CONSUMABLE:
                 api_instance = dofusdude.ConsumablesApi(api_client)
                 return api_instance.get_items_consumables_list(
-                language,
-                game,
-                sort_level=sort_level,
-                page_size=page_size,
-                page_number=page_number,
-            )
+                    language,
+                    game,
+                    sort_level=sort_level,
+                    page_size=page_size,
+                    page_number=page_number,
+                )
 
     """
 # Enter a context with an instance of the API client

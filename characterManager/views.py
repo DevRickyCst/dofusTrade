@@ -104,7 +104,9 @@ def add_character(request):
 
                 charac.save()
 
-                characSet = CaracteristiqueSetClass(user= user, character_id=charac)
+                characSet = CaracteristiqueSetClass(
+                    user=user, character_id=charac
+                )
 
                 characSet.save()
                 print(charac.id)
