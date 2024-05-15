@@ -77,14 +77,14 @@ def add_character(request):
         print(user_nb_character)
         if user_nb_character >= 5:
             return JsonResponse({'404': 'not ok'})
-        character_class = CharacterClass.objects.filter(pk=1).first()  # Get the character class by its ID
+        character_class = CharacterClass.objects.first()  # Get the character class by its ID
 
         print(character_class)
         if character_class and user:
             charac = Character(
                 name = 'New Perso',
                 level = 200,
-                server = 'test',
+                server = None,
                 character_class = character_class,
                 user_id = user
             )

@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "characterManager",
-    'sass_processor',
+    "sass_processor",
+    "src",
     "itemViewer",
     "registration",
 ]
