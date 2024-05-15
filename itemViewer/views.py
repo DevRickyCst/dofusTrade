@@ -30,13 +30,14 @@ def get_and_render_all_items(request):
     page_size = int(request.GET.get("page_size", 20))
     page_number = int(request.GET.get("page_number", 1))
 
-
-    tab_var.update({
-            'lvl_max' : lvl_max,
-            'lvl_min' : lvl_min,
-            'page_size' : page_size,
-            'page_number' : page_number,
-        })
+    tab_var.update(
+        {
+            "lvl_max": lvl_max,
+            "lvl_min": lvl_min,
+            "page_size": page_size,
+            "page_number": page_number,
+        }
+    )
     items = Item.objects.filter(
         categorie=item_type, level__lte=lvl_max, level__gte=lvl_min
     ).values()[page_size * (page_number - 1) : page_size * (page_number)]
@@ -73,15 +74,18 @@ def test_item(request):
     )
     return render(request, "all_items.html", context=context)
 
+
 def insert_resources(request):
 
     api = DofusDudeAPI("resources")
     data = api.get_all_item().items
     for item in data:
         correct_item = item.to_dict()
-        correct_item.update({"categorie":'resources'})
-        pk = correct_item.get('ankama_id')
-        itemq, created = Item.objects.get_or_create(pk=pk, defaults=correct_item)
+        correct_item.update({"categorie": "resources"})
+        pk = correct_item.get("ankama_id")
+        itemq, created = Item.objects.get_or_create(
+            pk=pk, defaults=correct_item
+        )
         # If the item already exists, update its fields with the new data
         if not created:
             for key, value in correct_item.items():
@@ -93,6 +97,7 @@ def insert_resources(request):
             print(e)
 
     return render(request, "index.html", context=context)
+
 
 def insert_equipments(request):
 
@@ -101,9 +106,11 @@ def insert_equipments(request):
     for item in data:
         print()
         correct_item = item.to_dict()
-        correct_item.update({"categorie":'equipments'})
-        pk = correct_item.get('ankama_id')
-        itemq, created = Item.objects.get_or_create(pk=pk, defaults=correct_item)
+        correct_item.update({"categorie": "equipments"})
+        pk = correct_item.get("ankama_id")
+        itemq, created = Item.objects.get_or_create(
+            pk=pk, defaults=correct_item
+        )
         # If the item already exists, update its fields with the new data
         if not created:
             for key, value in correct_item.items():
@@ -115,6 +122,7 @@ def insert_equipments(request):
             print(e)
 
     return render(request, "index.html", context=context)
+
 
 def insert_cosmetics(request):
 
@@ -123,9 +131,11 @@ def insert_cosmetics(request):
     data = api.get_all_item().items
     for item in data:
         correct_item = item.to_dict()
-        correct_item.update({"categorie":'cosmetics'})
-        pk = correct_item.get('ankama_id')
-        itemq, created = Item.objects.get_or_create(pk=pk, defaults=correct_item)
+        correct_item.update({"categorie": "cosmetics"})
+        pk = correct_item.get("ankama_id")
+        itemq, created = Item.objects.get_or_create(
+            pk=pk, defaults=correct_item
+        )
         # If the item already exists, update its fields with the new data
         if not created:
             for key, value in correct_item.items():
@@ -138,17 +148,22 @@ def insert_cosmetics(request):
 
     return render(request, "index.html", context=context)
 
+
 def insert_consumables(request):
 
     api = DofusDudeAPI("consumables")
     for i in range(20):
-        print(10+(i*10), 1+(i*10))
-        data = api.get_item_list(lvl_max=(10+(i*10)), lvl_min=1+(i*10)).items
+        print(10 + (i * 10), 1 + (i * 10))
+        data = api.get_item_list(
+            lvl_max=(10 + (i * 10)), lvl_min=1 + (i * 10)
+        ).items
         for item in data:
             correct_item = item.to_dict()
-            correct_item.update({"categorie":'consumables'})
-            pk = correct_item.get('ankama_id')
-            itemq, created = Item.objects.get_or_create(pk=pk, defaults=correct_item)
+            correct_item.update({"categorie": "consumables"})
+            pk = correct_item.get("ankama_id")
+            itemq, created = Item.objects.get_or_create(
+                pk=pk, defaults=correct_item
+            )
             # If the item already exists, update its fields with the new data
             if not created:
                 for key, value in correct_item.items():

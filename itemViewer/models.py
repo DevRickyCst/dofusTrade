@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Item(models.Model):
     ankama_id = models.IntegerField(primary_key=True, default=1)
     categorie = models.CharField(max_length=20, default="")
