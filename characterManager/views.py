@@ -10,12 +10,16 @@ from .models import CaracteristiqueSetClass, Character, CharacterClass
 @login_required
 def view_personnages(request, id=None):
     """View to render the character temlate with a specific id or no."""
-
+    user = User(pk=request.user.id)
     # Catch error if id is out of range
     try:
         main_character = Character.objects.get(id=id)
     except:
         main_character = Character.objects.first()
+        # Create a character if not exist
+        if main_character is None:
+            main_character = Character(name='Mon premier perso', user=user)
+            main_character.save()
 
     # Get character associated id
     main_charact_id = main_character.id
@@ -88,27 +92,16 @@ def add_character(request):
         if user_nb_character >= 5:
             return JsonResponse({"404": "not ok"})
 
-        character_class = (
-            CharacterClass.objects.first()
-        )  # Get the character class by its ID
-
-        if character_class and user:
+        if user:
             try:
                 charac = Character(
                     name="New Perso",
-                    level=200,
-                    server=None,
-                    character_class=character_class,
-                    user_id=user,
+                    user=user,
                 )
 
                 charac.save()
 
-                characSet = CaracteristiqueSetClass(character_id=charac)
-
-                characSet.save()
-                print(charac.id)
-
                 return JsonResponse({"id": charac.id})
-            except:
+            except Exception as e:
+                print(e)
                 return JsonResponse({"404": "not ok"})

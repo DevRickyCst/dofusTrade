@@ -3,6 +3,8 @@ import json
 from django.contrib.auth.models import User
 from django.db import models
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Server(models.Model):
     """
@@ -42,14 +44,16 @@ class Character(models.Model):
     """
 
     # Represents the name of the character.
-    name = models.CharField(max_length=100, default="random")
+    name = models.CharField(max_length=100, null=False)
     # Represents the level of the character.
-    level = models.IntegerField(default=None)
+    level = models.IntegerField(default=200)
     # Represents the server of the character.
-    server = models.ForeignKey(Server, on_delete=models.PROTECT, null=True)
+    default_server = Server.objects.first()
+    server = models.ForeignKey(Server, on_delete=models.PROTECT, default=default_server)
     # Represents the Class of the character.
+    default_character_class = CharacterClass.objects.first()
     character_class = models.ForeignKey(
-        CharacterClass, on_delete=models.CASCADE
+        CharacterClass, on_delete=models.CASCADE,  default=default_character_class
     )
     # Represents the user who created the character.
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -71,8 +75,6 @@ class CaracteristiqueSetClass(models.Model):
 
     """
 
-    # Represents the user who created the caracteristique set.
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     # Represents the user who created the caracteristique set.
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # Represents the user who created the caracteristique set.
