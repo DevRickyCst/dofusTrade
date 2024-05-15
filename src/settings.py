@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+LOGIN_URL = '/'
 
 INSTALLED_APPS = [
     "django.contrib.admin",
