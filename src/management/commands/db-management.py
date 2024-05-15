@@ -39,9 +39,10 @@ class Command(BaseCommand):
     # Calls the consumables API, fetch all consumables and add them to bd with field categorie set as "consumable"
     def call_consumable_api(self, configuration):
         added_consumables = 0
+        api_type = ApiTypeEnum.CONSUMABLE
         try:
             json_api_response = self.get_API_response(
-                configuration, ApiTypeEnum.CONSUMABLE
+                configuration, api_type
             ).to_json()
             json_consumable = json.loads(json_api_response)
             print(
@@ -50,7 +51,7 @@ class Command(BaseCommand):
                 + " consumables\n"
             )
             for item in json_consumable["items"]:
-                self.insert_in_Item_Table(item)
+                self.insert_in_Item_Table(item, api_type)
                 added_consumables += 1
             print(
                 "Added " + added_consumables.__str__() + " consumables to db"
@@ -64,9 +65,10 @@ class Command(BaseCommand):
     # Calls the equipment API, fetch all equipments and add them to bd with field categorie set as "equipment"
     def call_equipment_api(self, configuration):
         added_equipment = 0
+        api_type = ApiTypeEnum.EQUIPMENT
         try:
             api_response = self.get_API_response(
-                configuration, ApiTypeEnum.EQUIPMENT
+                configuration, api_type
             )
             print(
                 "The response of EquipmentApi->get_items_equipment_list contains "
@@ -75,7 +77,7 @@ class Command(BaseCommand):
             )
             for item in api_response.items:
                 json_item = json.loads(item.to_json())
-                self.insert_in_Item_Table(json_item)
+                self.insert_in_Item_Table(json_item, api_type)
                 added_equipment += 1
             print(added_equipment)
         except Exception as e:
@@ -130,7 +132,7 @@ class Command(BaseCommand):
                     page_number=page_number,
                 )
 
-    def insert_in_Item_Table(self, item):
+    def insert_in_Item_Table(self, item, api_type):
         i = Item(
             ankama_id=item["ankama_id"],
             name=item["name"],
@@ -138,6 +140,10 @@ class Command(BaseCommand):
             level=item["level"],
             image_urls=item["image_urls"],
         )
-        i.categorie = "consumables"
+        match api_type:
+            case ApiTypeEnum.CONSUMABLE:
+                i.categorie = "consumables"
+            case ApiTypeEnum.EQUIPMENT:
+                i.categorie = "equipments"
         i.save()
         self.added_items_count += 1
