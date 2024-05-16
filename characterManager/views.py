@@ -100,7 +100,6 @@ def add_character(request):
                 )
 
                 charac.save()
-
                 return JsonResponse({"id": charac.id})
             except Exception as e:
                 print(e)
