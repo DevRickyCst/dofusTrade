@@ -26,13 +26,10 @@ class Command(BaseCommand):
 
         self.clean_db()
 
-        self.call_consumable_api(configuration)
-
-        self.call_equipment_api(configuration)
-
-        self.call_cosmetic_api(configuration)
-        
-        self.call_resource_api(configuration)
+        self.call_right_api(configuration, ApiTypeEnum.CONSUMABLE)
+        self.call_right_api(configuration, ApiTypeEnum.COSMETIC)
+        self.call_right_api(configuration, ApiTypeEnum.RESOURCE)
+        self.call_right_api(configuration, ApiTypeEnum.EQUIPMENT)
 
         print(
             "Added a Total of "
@@ -40,100 +37,30 @@ class Command(BaseCommand):
             + " items to db"
         )
 
-    # Calls the consumables API, fetch all consumables and add them to bd with field categorie set as "consumable"
-    def call_consumable_api(self, configuration):
-        added_consumables = 0
-        api_type = ApiTypeEnum.CONSUMABLE
+    #Call get_API_response() to retrieve all items according to api_type, for each item call insert_in_Item_Table()
+    def call_right_api(self, configuration, api_type):
+        added_items = 0
         try:
-            json_api_response = self.get_API_response(
+            api_response = self.get_API_response(
                 configuration, api_type
-            ).to_json()
+            )
+            json_api_response = api_response.to_json()
             json_consumable = json.loads(json_api_response)
             print(
-                "The response of ConsumablesApi->get_items_consumables_list contains "
-                + len(json_consumable["items"]).__str__()
-                + " consumables"
+                "The response of " + api_type.name + " API contains "
+                + len(json_consumable["items"]).__str__() + " "
+                +  api_type.name
             )
             for item in json_consumable["items"]:
                 self.insert_in_Item_Table(item, api_type)
-                added_consumables += 1
+                added_items += 1
             print(
-                "Added " + added_consumables.__str__() + " consumables to db"
+                "Added " + added_items.__str__() + " " + api_type.name + " to db"
             )
         except Exception as e:
             print(
-                "Exception when calling ConsumablesApi->get_items_consumables_list: %s\n"
-                % e
-            )
-
-    # Calls the equipment API, fetch all equipments and add them to bd with field categorie set as "equipment"
-    def call_equipment_api(self, configuration):
-        added_equipment = 0
-        api_type = ApiTypeEnum.EQUIPMENT
-        try:
-            api_response = self.get_API_response(
-                configuration, api_type
-            )
-            print(
-                "The response of EquipmentApi->get_items_equipment_list contains "
-                + len(api_response.items).__str__()
-                + " equipments"
-            )
-            for item in api_response.items:
-                json_item = json.loads(item.to_json())
-                self.insert_in_Item_Table(json_item, api_type)
-                added_equipment += 1
-            print(added_equipment)
-        except Exception as e:
-            print(
-                "Exception when calling EquipmentApi->get_items_equipment_list: %s\n"
-                % e
-            )
-
-    def call_cosmetic_api(self, configuration):
-        added_cosmetic = 0
-        api_type = ApiTypeEnum.COSMETIC
-        try:
-            api_response = self.get_API_response(
-                configuration, api_type
-            )
-            print(
-                "The response of CosmeticApi->get_all_cosmetics_list contains "
-                + len(api_response.items).__str__()
-                + " cosmetics"
-            )
-            for item in api_response.items:
-                json_item = json.loads(item.to_json())
-                self.insert_in_Item_Table(json_item, api_type)
-                added_cosmetic += 1
-            print(added_cosmetic)
-        except Exception as e:
-            print(
-                "Exception when calling CosmeticApi->get_all_cosmetics_list: %s\n"
-                % e
-            )
-
-    def call_resource_api(self, configuration):
-        added_resource = 0
-        api_type = ApiTypeEnum.RESOURCE
-        try:
-            api_response = self.get_API_response(
-                configuration, api_type
-            )
-            print(
-                "The response of ResourcesApi->get_all_items_resources_list contains "
-                + len(api_response.items).__str__()
-                + " resources"
-            )
-            for item in api_response.items:
-                json_item = json.loads(item.to_json())
-                self.insert_in_Item_Table(json_item, api_type)
-                added_resource += 1
-            print(added_resource)
-        except Exception as e:
-            print(
-                "Exception when calling ResourcesApi->get_all_items_resources_list: %s\n"
-                % e
+                "Exception when calling " + api_type.name + " API %s\n"
+                 % e
             )
 
     # Delete every entries in the Item table
@@ -195,7 +122,6 @@ class Command(BaseCommand):
                     game,
                     sort_level=sort_level,
                 )
-
 
     def insert_in_Item_Table(self, json_item, api_type):
         item = Item(
