@@ -1,7 +1,27 @@
+.navbar-background {
+    background-image: url("../../image/dofus-background.jpeg");
+    background-size: cover;
+    position: absolute;
+    height: 160px;
+    width : 100%;
+    z-index: -1;
+}
+
+.div-nav-bar {
+    padding-left: 0px;
+    padding-right: 0px;
+    align-items: center;
+    z-index: 10;
+  }
+
 .navbar{
     padding: 0% 5%;
     min-height: 10em;
-    margin-bottom: 2em;
+    background: linear-gradient(to bottom, black, transparent);
+}
+
+.navbar .container-fluid {
+    width: 1200px;
 }
 
 .navbar li{
@@ -33,21 +53,6 @@
 
 }
 
-.navbar-background {
-    background-image: url("../../image/dofus-background.jpeg");
-    background-size: cover;
-    position: absolute;
-    height: 160px;
-    width : 100%;
-    z-index: -1;
-}
-
-.div-nav-bar {
-    align-items: center;
-    width : 1200px;
-    z-index: 10;
-  }
-
 .expend {
     height: 600px;
     margin-bottom: 200px;
@@ -64,7 +69,7 @@
 }
 
 .search_div {
-    width: 70%;
+    width: 900px;
     height: 15em;
     margin: auto;
     background-color: $gb-color;

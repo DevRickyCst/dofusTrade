@@ -1,10 +1,8 @@
 {% load static %}
 
-<div class="navbar-background {% if navbar == 'expend' %}expend{%endif%}">
-</div>
-
 <div class="div-nav-bar {% if navbar == 'expend' %}expend{%endif%} container-fluid">
-  <nav class="navbar navbar-expand-lg with-background sticky-top" >
+  <div class="navbar-background {% if navbar == 'expend' %}expend{%endif%}"></div>
+  <nav class="navbar navbar-expand-lg sticky-top" >
    <div class="container-fluid">
     <!-- Home button-->
     <a class="navbar-brand home_link" href="/"><img class="logo" src="{% static 'logo/logo.png' %}"></a>
