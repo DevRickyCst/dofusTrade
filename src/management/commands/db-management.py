@@ -31,6 +31,8 @@ class Command(BaseCommand):
         self.call_equipment_api(configuration)
 
         self.call_cosmetic_api(configuration)
+        
+        self.call_resource_api(configuration)
 
         print(
             "Added a Total of "
@@ -96,9 +98,9 @@ class Command(BaseCommand):
                 configuration, api_type
             )
             print(
-                "The response of CosmeticApi->get_items_equipment_list contains "
+                "The response of CosmeticApi->get_all_cosmetics_list contains "
                 + len(api_response.items).__str__()
-                + " cosmetic"
+                + " cosmetics"
             )
             for item in api_response.items:
                 json_item = json.loads(item.to_json())
@@ -107,7 +109,30 @@ class Command(BaseCommand):
             print(added_cosmetic)
         except Exception as e:
             print(
-                "Exception when calling EquipmentApi->get_items_equipment_list: %s\n"
+                "Exception when calling CosmeticApi->get_all_cosmetics_list: %s\n"
+                % e
+            )
+
+    def call_resource_api(self, configuration):
+        added_resource = 0
+        api_type = ApiTypeEnum.RESOURCE
+        try:
+            api_response = self.get_API_response(
+                configuration, api_type
+            )
+            print(
+                "The response of ResourcesApi->get_all_items_resources_list contains "
+                + len(api_response.items).__str__()
+                + " resources"
+            )
+            for item in api_response.items:
+                json_item = json.loads(item.to_json())
+                self.insert_in_Item_Table(json_item, api_type)
+                added_resource += 1
+            print(added_resource)
+        except Exception as e:
+            print(
+                "Exception when calling ResourcesApi->get_all_items_resources_list: %s\n"
                 % e
             )
 
@@ -164,8 +189,8 @@ class Command(BaseCommand):
                     sort_level=sort_level,
                 )
             if api_type == ApiTypeEnum.RESOURCE:
-                api_instance = dofusdude.CosmeticsApi(api_client)
-                return api_instance.get_all_cosmetics_list(
+                api_instance = dofusdude.ResourcesApi(api_client)
+                return api_instance.get_all_items_resources_list(
                     language,
                     game,
                     sort_level=sort_level,
