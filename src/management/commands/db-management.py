@@ -11,9 +11,11 @@ from dofusdude.rest import ApiException
 from itemViewer.models import Item
 from src.management.commands.__ApiTypeEnum import ApiTypeEnum as ApiTypeEnum
 
+#This class is a custom django-admin command, created to managebasic tasks on the database
+#Calling it will clean every entry in in the Item Table and repopulate it using dofusdu.de api
 
 class Command(BaseCommand):
-    help = "Fill Bdd with consumables"
+    help = "Manage the database"
     added_items_count = 0
 
     def add_arguments(self, parser):
@@ -21,15 +23,12 @@ class Command(BaseCommand):
         print()
 
     def handle(self, *args, **options):
-        # Defining the host is optional and defaults to https://api.dofusdu.de
-        configuration = dofusdude.Configuration(host="https://api.dofusdu.de")
-
         self.clean_db()
 
-        self.call_right_api(configuration, ApiTypeEnum.CONSUMABLE)
-        self.call_right_api(configuration, ApiTypeEnum.COSMETIC)
-        self.call_right_api(configuration, ApiTypeEnum.RESOURCE)
-        self.call_right_api(configuration, ApiTypeEnum.EQUIPMENT)
+        self.call_right_api(ApiTypeEnum.CONSUMABLE)
+        self.call_right_api(ApiTypeEnum.COSMETIC)
+        self.call_right_api(ApiTypeEnum.RESOURCE)
+        self.call_right_api(ApiTypeEnum.EQUIPMENT)
 
         print(
             "Added a Total of "
@@ -38,10 +37,10 @@ class Command(BaseCommand):
         )
 
     # Call get_API_response() to retrieve all items according to api_type, for each item call insert_in_Item_Table()
-    def call_right_api(self, configuration, api_type):
+    def call_right_api(self, api_type):
         added_items = 0
         try:
-            api_response = self.get_API_response(configuration, api_type)
+            api_response = self.get_API_response(api_type)
             print(
                 "The response of "
                 + api_type.name
@@ -71,8 +70,10 @@ class Command(BaseCommand):
         all_bdd_Items.delete()
         print("Deleted")
 
-    # Create the api instance and return the response from the correct API
-    def get_API_response(self, configuration, api_type):
+    # Create the api_instance and return the response from the correct API
+    def get_API_response(self, api_type):
+        # Defining the host is optional and defaults to https://api.dofusdu.de
+        configuration = dofusdude.Configuration(host="https://api.dofusdu.de")
         with dofusdude.ApiClient(configuration) as api_client:
             # Common parameters to all API
             language = "fr"
@@ -119,7 +120,8 @@ class Command(BaseCommand):
                     game,
                     sort_level=sort_level,
                 )
-
+            
+    #insert provided item in Item table, using api_type to fill categorie column 
     def insert_in_Item_Table(self, item, api_type):
         db_item = Item(
             ankama_id=item.ankama_id,
@@ -127,15 +129,7 @@ class Command(BaseCommand):
             type=item.type.name,
             level=item.level,
             image_urls=json.loads(item.image_urls.to_json()),
+            categorie=api_type.value
         )
-        match api_type:
-            case ApiTypeEnum.CONSUMABLE:
-                db_item.categorie = "consumables"
-            case ApiTypeEnum.EQUIPMENT:
-                db_item.categorie = "equipments"
-            case ApiTypeEnum.COSMETIC:
-                db_item.categorie = "cosmetics"
-            case ApiTypeEnum.RESOURCE:
-                db_item.categorie = "resources"
         db_item.save()
         self.added_items_count += 1
