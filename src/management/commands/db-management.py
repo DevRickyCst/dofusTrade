@@ -11,8 +11,9 @@ from dofusdude.rest import ApiException
 from itemViewer.models import Item
 from src.management.commands.__ApiTypeEnum import ApiTypeEnum as ApiTypeEnum
 
-#This class is a custom django-admin command, created to managebasic tasks on the database
-#Calling it will clean every entry in in the Item Table and repopulate it using dofusdu.de api
+# This class is a custom django-admin command, created to managebasic tasks on the database
+# Calling it will clean every entry in in the Item Table and repopulate it using dofusdu.de api
+
 
 class Command(BaseCommand):
     help = "Manage the database"
@@ -120,8 +121,8 @@ class Command(BaseCommand):
                     game,
                     sort_level=sort_level,
                 )
-            
-    #insert provided item in Item table, using api_type to fill categorie column 
+
+    # insert provided item in Item table, using api_type to fill categorie column
     def insert_in_Item_Table(self, item, api_type):
         db_item = Item(
             ankama_id=item.ankama_id,
@@ -129,7 +130,7 @@ class Command(BaseCommand):
             type=item.type.name,
             level=item.level,
             image_urls=json.loads(item.image_urls.to_json()),
-            categorie=api_type.value
+            categorie=api_type.value,
         )
         db_item.save()
         self.added_items_count += 1
