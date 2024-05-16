@@ -44,7 +44,7 @@ def view_personnages(request, id=None):
 
     return render(
         request,
-        "perso.html",
+        "character_index.html",
         context={
             "character": main_character,
             "other_charact": other_charact,
@@ -105,3 +105,25 @@ def add_character(request):
             except Exception as e:
                 print(e)
                 return JsonResponse({"404": "not ok"})
+
+
+def delete_character(request):
+    '''View to delete a character from a character in POST data'''
+    if (request.user.is_authenticated) & (request.method == "POST"):
+        try:
+            # Get user
+            user = User.objects.filter(pk=request.user.id).first()
+            # Get character_id from POST value
+            character_id = request.POST.get("character_id")
+            if character_id:
+                # Get character
+                character = Character.objects.filter(user_id=user, id= character_id).first()
+                if character:
+                    character.delete()
+                    return JsonResponse({"mesage": f"charac {character_id} has been deleted"}, status=200)
+                else:
+                    return JsonResponse({"message": "Character not found"}, status=404)
+            else:
+                return JsonResponse({"message": "Invalid character ID"}, status=400)
+        except Exception as e:
+            return JsonResponse({"message": str(e)}, status=500)

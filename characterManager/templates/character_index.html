@@ -6,6 +6,8 @@
 
 
 <div class="character-div row">
+
+    <!-- Other character selection -->
     <div class = "character-selection-div col-1">
         {% for charac in other_charact %}
             <a href="/personnages/{{charac.id}}">
@@ -18,10 +20,16 @@
             <button type="submit" id="add-character-btn">
                 <img class="add-perso" src="{% static 'logo/add.svg' %}" alt="Description de l'image SVG">
             </button>
-
         </form>
     </div>
+
+    <!-- Main character info (Image and caracteristique) -->
     <div class="left col-3">
+        <form id="deleteCharacterForm" method="post">
+            <input class="d-none" name="character_id" value="{{character.id}}"/>
+            {% csrf_token %}
+            <button type="submit" class="btn-close" aria-label="Close"></button>
+        </form>
         <img src="{{ character.character_class.logo_url }}">
         <form id="characSetForm" method="post">
             {% csrf_token %}
@@ -40,6 +48,8 @@
                 <button type="submit" id="carac-save-btn" class="btn btn-primary mb-2">Modifier</button>
             </form>
     </div>
+
+    <!-- Main charactere infomation + main character menu -->
     <div class="character-info col-8">
         <h1 class="pseudo">{{ character.name|title }}</h1>
         <div class="info-item">
@@ -53,7 +63,7 @@
 
         <div class="personnage-menu">
 
-            {% include 'menu/charac.html' %}
+            {% include 'menu/pano.html' %}
 
         </div>
     </div>
@@ -98,9 +108,7 @@
             });
         });
     });
-  </script>
 
-<script>
     // Attends que le document soit prêt
     $(document).ready(function() {
         // Écoute l'événement de soumission du formulaire
@@ -121,7 +129,6 @@
                     // Si la réponse indique une connexion réussie
                     console.log('Connexion réussie!');
                     console.log(response)
-                    //window.location.href = '/';              
                 } else {
                     // Si la réponse indique une erreur de connexion
                     console.log('Erreur de connexion:', response['401']);
@@ -130,6 +137,44 @@
                 }
                   // Affiche la réponse dans la console
                   console.log('Réponse du serveur:', response);
+                },
+                error: function(xhr, status, error) {
+                    // Affiche l'erreur dans la console
+                    console.error('Erreur de requête AJAX:', error);
+                }
+            });
+        });
+    });
+
+    // Attends que le document soit prêt
+    $(document).ready(function() {
+        // Écoute l'événement de soumission du formulaire
+        $('#deleteCharacterForm').submit(function(e) {
+            e.preventDefault(); // Empêche la soumission par défaut du formulaire
+            
+            // Récupère les données du formulaire
+            var formData = $(this).serialize();
+            
+            // Envoie les données du formulaire au serveur
+            $.ajax({
+                type: 'POST',
+                url: '/personnages/deleteCharacter',
+                data: formData,
+                success: function(response, status, xhr) {
+                // Vérifie le contenu de la réponse
+                if (xhr.status === 200) {
+                    // Si la réponse indique une connexion réussie
+                    console.log('Connexion réussie!');
+                    console.log(response)
+                    window.location.href = '/personnages';              
+                } else {
+                    // Si la réponse indique une erreur de connexion
+                    console.log('Erreur de connexion:', response['401']);
+                    $('#passwordError').show();
+                    // Affiche un message d'erreur ou effectue toute autre action nécessaire
+                }
+                    // Affiche la réponse dans la console
+                    console.log('Réponse du serveur:', response);
                 },
                 error: function(xhr, status, error) {
                     // Affiche l'erreur dans la console
