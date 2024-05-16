@@ -42,9 +42,9 @@
   position: fixed;
   bottom: 50px;
   right: 50px;
-  background-color: #9AC8EB;
+  background-color: #F7F6CF;
   /* Couleur de fond */
-  color: white;
+  color: #063266;
   /* Couleur du texte */
   padding: 10px 20px;
   /* Espacement à l'intérieur du bouton */
@@ -56,33 +56,34 @@
   /* Taille de la police */
   cursor: pointer;
   /* Curseur de la souris */
-  transition: background-color 0.3s ease;
-  /* Transition en douceur */ }
+  box-shadow: 0px 0px 0.5em black, 1px 0px #9AC8EB, 0px 1px #9AC8EB, -1px 0px #9AC8EB, 0px -1px #9AC8EB;
+  transition: box-shadow 0.5s, background-color 0.3s ease, color 0.3s ease; }
 
 .charactere-btn:hover {
-  background-color: #063266;
-  /* Couleur de fond au survol */ }
+  color: #063266;
+  /* Couleur de fond au survol */
+  background-color: #9AC8EB;
+  box-shadow: 0px 0px 1em black, 1px 0px #9AC8EB, 0px 1px #9AC8EB, -1px 0px #9AC8EB, 0px -1px #9AC8EB; }
 
 .navbar {
   padding: 0% 5%;
   min-height: 10em;
   margin-bottom: 2em; }
 
-.navbar .home_link {
-  padding: 0 2em; }
-
 .navbar li {
   margin: 0% 4%; }
 
 .navbar .logo {
   width: 140px;
-  height: 140px;
-  margin-right: -50px; }
+  height: 140px; }
 
 .nav-link {
   font-size: 24px;
   color: #F7F6CF;
-  text-shadow: 1px 1px 10px black; }
+  text-shadow: 2px 2px 5px black; }
+
+.connection_link {
+  filter: drop-shadow(2px 2px 5px black); }
 
 .nav-link:hover {
   color: #9AC8EB; }
@@ -92,9 +93,18 @@
   width: 75%;
   text-shadow: 0 0 4px #063266, 0 0 4px #063266, 0 0 4px #063266, 0 0 4px #063266; }
 
-.div-nav-bar {
+.navbar-background {
   background-image: url("../../image/dofus-background.jpeg");
-  background-size: cover; }
+  background-size: cover;
+  position: absolute;
+  height: 160px;
+  width: 100%;
+  z-index: -1; }
+
+.div-nav-bar {
+  align-items: center;
+  width: 1200px;
+  z-index: 10; }
 
 .expend {
   height: 600px;
@@ -113,10 +123,10 @@
   width: 70%;
   height: 15em;
   margin: auto;
-  background-color: #9AC8EB;
+  background-color: #9fc7d6;
   border-radius: 15px;
   padding: 1em;
-  box-shadow: 0px 0px 4em black, 1px 0px #9AC8EB, 0px 1px #9AC8EB, -1px 0px #9AC8EB, 0px -1px #9AC8EB; }
+  box-shadow: 0px 1px 4em black, 1px 0px #9AC8EB, 0px 1px #9AC8EB, -1px 0px #9AC8EB, 0px -1px #9AC8EB; }
 
 .search_div div {
   width: 80%;
@@ -133,10 +143,11 @@
   width: 100%;
   background: rgba(255, 255, 255, 0.4);
   border: none;
-  border-radius: 45px; }
+  border-radius: 45px;
+  transition: background 0.7s; }
   .form-control[type="navbar-search"]:focus {
     box-shadow: none;
-    background: rgba(255, 255, 255, 0.5); }
+    background: rgba(255, 255, 255, 0.6); }
 
 #charactereModal tr img {
   width: 75px; }
@@ -148,10 +159,10 @@
   font-family: "Jacques Francois Shadow", serif; }
 
 body {
-  background-color: #F7F6CF; }
+  background-color: #f0d4b9; }
 
 .app_div {
-  width: 70%;
+  width: 1100px;
   margin: auto;
   padding: 1em;
   background-color: white;
