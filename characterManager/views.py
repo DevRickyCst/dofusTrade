@@ -108,7 +108,7 @@ def add_character(request):
 
 
 def delete_character(request):
-    '''View to delete a character from a character in POST data'''
+    """View to delete a character from a character in POST data"""
     if (request.user.is_authenticated) & (request.method == "POST"):
         try:
             # Get user
@@ -117,13 +117,22 @@ def delete_character(request):
             character_id = request.POST.get("character_id")
             if character_id:
                 # Get character
-                character = Character.objects.filter(user_id=user, id= character_id).first()
+                character = Character.objects.filter(
+                    user_id=user, id=character_id
+                ).first()
                 if character:
                     character.delete()
-                    return JsonResponse({"mesage": f"charac {character_id} has been deleted"}, status=200)
+                    return JsonResponse(
+                        {"mesage": f"charac {character_id} has been deleted"},
+                        status=200,
+                    )
                 else:
-                    return JsonResponse({"message": "Character not found"}, status=404)
+                    return JsonResponse(
+                        {"message": "Character not found"}, status=404
+                    )
             else:
-                return JsonResponse({"message": "Invalid character ID"}, status=400)
+                return JsonResponse(
+                    {"message": "Invalid character ID"}, status=400
+                )
         except Exception as e:
             return JsonResponse({"message": str(e)}, status=500)
