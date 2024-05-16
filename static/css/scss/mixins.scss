@@ -2,6 +2,14 @@
     text-shadow: 0 0 4px $db-color, 0 0 4px $db-color, 0 0 4px $db-color, 0 0 4px $db-color;
 }
 
-@mixin clickable-text {
-    text-shadow: 1px 1px 10px black,
+@mixin clickable {
+    text-shadow: 2px 2px 5px black,
+}
+
+@mixin box_shadow {
+    box-shadow: 0px 1px 1em black, 1px 0px $lb-color, 0px 1px $lb-color, -1px 0px $lb-color, 0px -1px $lb-color;
+}
+
+@mixin big_box_shadow {
+    box-shadow: 0px 1px 2em black, 1px 0px $lb-color, 0px 1px $lb-color, -1px 0px $lb-color, 0px -1px $lb-color;
 }

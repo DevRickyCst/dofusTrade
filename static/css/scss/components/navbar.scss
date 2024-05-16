@@ -1,13 +1,7 @@
-
-
 .navbar{
     padding: 0% 5%;
     min-height: 10em;
     margin-bottom: 2em;
-}
-
-.navbar .home_link{
-    padding: 0 2em;
 }
 
 .navbar li{
@@ -17,12 +11,15 @@
 .navbar .logo{
     width: 140px;
     height: 140px;
-    margin-right: -50px;
 }
 .nav-link {
     font-size: 24px;
     color: $y-color;
-    @include clickable-text;
+    @include clickable;
+}
+
+.connection_link {
+    filter: drop-shadow(2px 2px 5px black);
 }
 
 .nav-link:hover {
@@ -35,10 +32,20 @@
     @include main-title-outline;
 
 }
-.div-nav-bar {
+
+.navbar-background {
     background-image: url("../../image/dofus-background.jpeg");
     background-size: cover;
+    position: absolute;
+    height: 160px;
+    width : 100%;
+    z-index: -1;
+}
 
+.div-nav-bar {
+    align-items: center;
+    width : 1200px;
+    z-index: 10;
   }
 
 .expend {
@@ -60,10 +67,10 @@
     width: 70%;
     height: 15em;
     margin: auto;
-    background-color: $lb-color;
+    background-color: $gb-color;
     border-radius: 15px;
     padding: 1em;
-    box-shadow: 0px 0px 4em black, 1px 0px $lb-color, 0px 1px $lb-color, -1px 0px $lb-color, 0px -1px $lb-color;
+    box-shadow: 0px 1px 4em black, 1px 0px $lb-color, 0px 1px $lb-color, -1px 0px $lb-color, 0px -1px $lb-color;
 }
 
 .search_div div{
@@ -85,9 +92,10 @@
     background: rgba(255,255,255,0.4);
     border: none;
     border-radius: 45px;
+    transition: background 0.7s;
 
     &:focus{
         box-shadow: none;
-        background: rgba(255,255,255,0.5);
+        background: rgba(255,255,255,0.6);
     }
 }
