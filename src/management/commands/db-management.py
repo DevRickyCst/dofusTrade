@@ -44,14 +44,12 @@ class Command(BaseCommand):
             api_response = self.get_API_response(
                 configuration, api_type
             )
-            json_api_response = api_response.to_json()
-            json_consumable = json.loads(json_api_response)
             print(
                 "The response of " + api_type.name + " API contains "
-                + len(json_consumable["items"]).__str__() + " "
+                + len(api_response.items).__str__() + " "
                 +  api_type.name
             )
-            for item in json_consumable["items"]:
+            for item in api_response.items:
                 self.insert_in_Item_Table(item, api_type)
                 added_items += 1
             print(
@@ -66,13 +64,9 @@ class Command(BaseCommand):
     # Delete every entries in the Item table
     def clean_db(self):
         all_bdd_Items = Item.objects.all()
-        deleted_items_count = 0
         print("Found " + all_bdd_Items.count().__str__() + " entries in db")
-        if all_bdd_Items.count() != 0:
-            for bdd_item in all_bdd_Items:
-                bdd_item.delete()
-                deleted_items_count += 1
-        print("Deleted " + deleted_items_count.__str__() + " entries in db")
+        all_bdd_Items.delete()
+        print("Deleted")
 
     # Create the api instance and return the response from the correct API
     def get_API_response(self, configuration, api_type):
@@ -123,22 +117,22 @@ class Command(BaseCommand):
                     sort_level=sort_level,
                 )
 
-    def insert_in_Item_Table(self, json_item, api_type):
-        item = Item(
-            ankama_id=json_item["ankama_id"],
-            name=json_item["name"],
-            type=json_item["type"]["name"],
-            level=json_item["level"],
-            image_urls=json_item["image_urls"],
+    def insert_in_Item_Table(self, item, api_type):
+        db_item = Item(
+            ankama_id=item.ankama_id,
+            name=item.name,
+            type=item.type.name,
+            level=item.level,
+            image_urls=json.loads(item.image_urls.to_json()),
         )
         match api_type:
             case ApiTypeEnum.CONSUMABLE:
-                item.categorie = "consumables"
+                db_item.categorie = "consumables"
             case ApiTypeEnum.EQUIPMENT:
-                item.categorie = "equipments"
+                db_item.categorie = "equipments"
             case ApiTypeEnum.COSMETIC:
-                item.categorie = "cosmetics"
+                db_item.categorie = "cosmetics"
             case ApiTypeEnum.RESOURCE:
-                item.categorie = "resources"
-        item.save()
+                db_item.categorie = "resources"
+        db_item.save()
         self.added_items_count += 1
