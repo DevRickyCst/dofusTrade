@@ -37,29 +37,32 @@ class Command(BaseCommand):
             + " items to db"
         )
 
-    #Call get_API_response() to retrieve all items according to api_type, for each item call insert_in_Item_Table()
+    # Call get_API_response() to retrieve all items according to api_type, for each item call insert_in_Item_Table()
     def call_right_api(self, configuration, api_type):
         added_items = 0
         try:
-            api_response = self.get_API_response(
-                configuration, api_type
-            )
+            api_response = self.get_API_response(configuration, api_type)
             print(
-                "The response of " + api_type.name + " API contains "
-                + len(api_response.items).__str__() + " "
-                +  api_type.name
+                "The response of "
+                + api_type.name
+                + " API contains "
+                + len(api_response.items).__str__()
+                + " "
+                + api_type.name
+                + " items"
             )
             for item in api_response.items:
                 self.insert_in_Item_Table(item, api_type)
                 added_items += 1
             print(
-                "Added " + added_items.__str__() + " " + api_type.name + " to db"
+                "Added "
+                + added_items.__str__()
+                + " "
+                + api_type.name
+                + " to db"
             )
         except Exception as e:
-            print(
-                "Exception when calling " + api_type.name + " API %s\n"
-                 % e
-            )
+            print("Exception when calling " + api_type.name + " API %s\n" % e)
 
     # Delete every entries in the Item table
     def clean_db(self):
