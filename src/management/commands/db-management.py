@@ -30,6 +30,8 @@ class Command(BaseCommand):
 
         self.call_equipment_api(configuration)
 
+        self.call_cosmetic_api(configuration)
+
         print(
             "Added a Total of "
             + self.added_items_count.__str__()
@@ -48,7 +50,7 @@ class Command(BaseCommand):
             print(
                 "The response of ConsumablesApi->get_items_consumables_list contains "
                 + len(json_consumable["items"]).__str__()
-                + " consumables\n"
+                + " consumables"
             )
             for item in json_consumable["items"]:
                 self.insert_in_Item_Table(item, api_type)
@@ -80,6 +82,29 @@ class Command(BaseCommand):
                 self.insert_in_Item_Table(json_item, api_type)
                 added_equipment += 1
             print(added_equipment)
+        except Exception as e:
+            print(
+                "Exception when calling EquipmentApi->get_items_equipment_list: %s\n"
+                % e
+            )
+
+    def call_cosmetic_api(self, configuration):
+        added_cosmetic = 0
+        api_type = ApiTypeEnum.COSMETIC
+        try:
+            api_response = self.get_API_response(
+                configuration, api_type
+            )
+            print(
+                "The response of CosmeticApi->get_items_equipment_list contains "
+                + len(api_response.items).__str__()
+                + " cosmetic"
+            )
+            for item in api_response.items:
+                json_item = json.loads(item.to_json())
+                self.insert_in_Item_Table(json_item, api_type)
+                added_cosmetic += 1
+            print(added_cosmetic)
         except Exception as e:
             print(
                 "Exception when calling EquipmentApi->get_items_equipment_list: %s\n"
@@ -131,19 +156,38 @@ class Command(BaseCommand):
                     page_size=page_size,
                     page_number=page_number,
                 )
+            if api_type == ApiTypeEnum.COSMETIC:
+                api_instance = dofusdude.CosmeticsApi(api_client)
+                return api_instance.get_all_cosmetics_list(
+                    language,
+                    game,
+                    sort_level=sort_level,
+                )
+            if api_type == ApiTypeEnum.RESOURCE:
+                api_instance = dofusdude.CosmeticsApi(api_client)
+                return api_instance.get_all_cosmetics_list(
+                    language,
+                    game,
+                    sort_level=sort_level,
+                )
 
-    def insert_in_Item_Table(self, item, api_type):
-        i = Item(
-            ankama_id=item["ankama_id"],
-            name=item["name"],
-            type=item["type"]["name"],
-            level=item["level"],
-            image_urls=item["image_urls"],
+
+    def insert_in_Item_Table(self, json_item, api_type):
+        item = Item(
+            ankama_id=json_item["ankama_id"],
+            name=json_item["name"],
+            type=json_item["type"]["name"],
+            level=json_item["level"],
+            image_urls=json_item["image_urls"],
         )
         match api_type:
             case ApiTypeEnum.CONSUMABLE:
-                i.categorie = "consumables"
+                item.categorie = "consumables"
             case ApiTypeEnum.EQUIPMENT:
-                i.categorie = "equipments"
-        i.save()
+                item.categorie = "equipments"
+            case ApiTypeEnum.COSMETIC:
+                item.categorie = "cosmetics"
+            case ApiTypeEnum.RESOURCE:
+                item.categorie = "resources"
+        item.save()
         self.added_items_count += 1
