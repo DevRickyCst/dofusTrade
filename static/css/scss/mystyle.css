@@ -38,6 +38,9 @@
   display: block;
   margin: auto; }
 
+.btn-close {
+  float: right; }
+
 .charactere-btn {
   position: fixed;
   bottom: 50px;
