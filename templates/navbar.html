@@ -1,5 +1,7 @@
 {% load static %}
 
+<script src="{% static 'js/components/navbar.js' %}"></script>
+
 <div class="div-nav-bar {% if navbar == 'expend' %}expend{%endif%} container-fluid">
   <div class="navbar-background {% if navbar == 'expend' %}expend{%endif%}"></div>
   <nav class="navbar navbar-expand-lg sticky-top" >
@@ -15,7 +17,7 @@
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Items</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="{% url 'resources'%}">Resources</a></li>
-            <li><a class="dropdown-item" href="{% url 'equipments'%}">Equipments</a></li>
+            <li><a class="dropdown-item" hretif="{% url 'equipments'%}">Equipments</a></li>
             <li><a class="dropdown-item" href="{% url 'cosmetics'%}">Cosmetics</a></li>
             <li><a class="dropdown-item" href="{% url 'consumables'%}">Consumables</a></li>
           </ul>
@@ -57,15 +59,13 @@
     </div>
   </nav>
       {% if navbar == 'expend' %}
-      <h1 class="title-navbar-expand"> Dofus Graal</h1>
+      <h1 class="title-navbar-expand" id="title-navbar-expand"> Dofus Graal</h1>
 
-      <div class="search_div">
+      <div class="search_div" id="search_div" >
 
         <form>
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Looking for something ?</label>
-            <input type="navbar-search" class="form-control" id="exampleInputEmail1" placeholder="Search for anything (Item, Pano, Almanax ...) ">
-          </div>
+          <label for="exampleInputEmail1" class="form-label" id="search-label">Looking for something ?</label>
+          <input type="navbar-search" class="form-control" id="exampleInputEmail1" placeholder="Search for anything (Item, Pano, Almanax ...) ">
         </form>
       </div>
 
