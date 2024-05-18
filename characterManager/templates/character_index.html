@@ -36,7 +36,7 @@
             <h4 class="title">Caractéristiques</h4>
             <table class="table">
                 <tbody>
-                    {% for caracteristique, value in caracteristiques.items %}
+                    {% for caracteristique, value in main_character_stuff.carac.items %}
                         <tr>
                             <td><img src="/static/image/logo_charac/{{caracteristique}}.png">{{caracteristique|title}}</td>
                             <td><input type="number" name="{{caracteristique}}" min="0" max="1000" value= "{{value}}"/></td>

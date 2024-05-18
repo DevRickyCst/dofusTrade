@@ -1,10 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+
 from django.http import JsonResponse
 
 from src.custumRender import render
-
-from .models import CaracteristiqueSetClass, Character, CharacterClass
+from .models import StuffSet, Character, User, CaracteristiqueSet
 
 
 @login_required
@@ -13,7 +12,7 @@ def view_personnages(request, id=None):
     user = User(pk=request.user.id)
     # Catch error if id is out of range
     try:
-        main_character = Character.objects.get(id=id)
+        main_character = Character.objects.get(pk=id)
     except:
         main_character = Character.objects.first()
         # Create a character if not exist
@@ -25,14 +24,20 @@ def view_personnages(request, id=None):
     main_charact_id = main_character.id
 
     # Get set of carac associated with the character
-    carac_set = (
-        CaracteristiqueSetClass.objects.filter(character_id=main_charact_id)
+    stuff = (
+        StuffSet.objects.filter(character_id=main_charact_id)
+        .first()
+    )
+
+    # Get carac
+    carac = (
+        CaracteristiqueSet.objects
+        .filter(user=user,character=main_character)
         .values(
             "vitalite", "agilite", "chance", "force", "intelligence", "sagesse"
         )
         .first()
     )
-
     # Other character info in order to render them
     other_charact = (
         Character.objects.filter(user_id=request.user.id)
@@ -42,13 +47,18 @@ def view_personnages(request, id=None):
         )
     )
 
+    print(carac)
+    print(stuff)
     return render(
         request,
         "character_index.html",
         context={
             "character": main_character,
             "other_charact": other_charact,
-            "caracteristiques": carac_set,
+            "main_character_stuff": {
+                "carac": carac,
+                "stuff": stuff
+            }
         },
     )
 
@@ -64,7 +74,7 @@ def update_carac_set(request):
             character_id = request.POST.get("character_id")
 
             # Get Characteristique set
-            charac_set = CaracteristiqueSetClass.objects.filter(
+            charac_set = CaracteristiqueSet.objects.filter(
                 character_id=character_id, user=user
             ).first()
 

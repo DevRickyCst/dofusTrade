@@ -5,13 +5,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    initial = True
-
-    dependencies = []
+    dependencies = [
+        ("characterManager", "0001_initial"),
+    ]
 
     operations = [
         migrations.CreateModel(
-            name="Server",
+            name="CharacterClass",
             fields=[
                 (
                     "id",
@@ -22,7 +22,16 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("name", models.CharField(max_length=100, unique=True)),
+                (
+                    "name",
+                    models.CharField(
+                        default="random", max_length=100, unique=True
+                    ),
+                ),
+                (
+                    "logo_url",
+                    models.CharField(default="random", max_length=100),
+                ),
             ],
         ),
     ]
