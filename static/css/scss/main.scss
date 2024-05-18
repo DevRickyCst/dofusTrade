@@ -50,3 +50,6 @@ body{
     height: fit-content;
 }
 
+body.modal-open {
+    padding-right: 0 !important; /* Ensure no padding is added when the modal is open */
+}
