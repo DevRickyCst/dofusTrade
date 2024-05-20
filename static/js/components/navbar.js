@@ -4,6 +4,7 @@ window.addEventListener("load", function() {
         searchInput[0].style.transition = 'opacity 0s';
         searchInput[0].style.opacity = 1;
     }
+    searchInput[0].style.transition = 'background 0.7s';
 });
 
 window.addEventListener('scroll', function() {
@@ -26,7 +27,7 @@ function retractSearchBar(scrollPosition) {
     var searchDiv = document.getElementById('search_div');
     var searchInput = document.getElementsByClassName('navbar-search-retracted');
     var searchLabel = document.getElementById('search-label');
-    if (scrollPosition >= 400) {
+    if (scrollPosition >= 350) {
         searchDiv.style.width = '900px';
         //searchDiv.style.left = '70%';
         searchDiv.style.opacity = 0;
