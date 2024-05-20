@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+
 class Server(models.Model):
     """
     Represents a single server class.
@@ -29,7 +30,8 @@ class CharacterClass(models.Model):
 
     def __str__(self):
         return "id: " + self.id.__str__() + ", name : " + self.name
-    
+
+
 class Character(models.Model):
     """
     Represents a single character.
@@ -43,7 +45,10 @@ class Character(models.Model):
     level = models.IntegerField(default=200)
     # Represents the server of the character.
     server = models.ForeignKey(
-        Server, on_delete=models.PROTECT, null=True, blank=True,
+        Server,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
     )
     # Represents the Class of the character.
     character_class = models.ForeignKey(
@@ -61,4 +66,3 @@ class Character(models.Model):
 
     def __str__(self):
         return "id: " + self.id.__str__() + ", name : " + self.name
-

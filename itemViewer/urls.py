@@ -24,5 +24,4 @@ urlpatterns = [
         views.get_and_render_single_item,
         name="equipment",
     ),
-
 ]

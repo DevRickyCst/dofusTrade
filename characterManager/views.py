@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 
 from src.custumRender import render
-from .models import Character, SetCaracteristique, Set
-from django.contrib.auth.models import User
+
+from .models import Character, Set, SetCaracteristique
 
 
 @login_required
@@ -25,10 +25,7 @@ def view_personnages(request, id=None):
     main_charact_id = main_character.id
 
     # Get set of carac associated with the character
-    stuff = (
-        Set.objects.filter(character_id=main_charact_id)
-        .first()
-    )
+    stuff = Set.objects.filter(character_id=main_charact_id).first()
 
     # Other character info in order to render them
     other_charact = (
@@ -41,12 +38,12 @@ def view_personnages(request, id=None):
 
     return render(
         request,
-        'base.html',
+        "base.html",
         context={
             "app": "character",
             "character": main_character,
             "other_charact": other_charact,
-            "main_character_set": stuff
+            "main_character_set": stuff,
         },
     )
 
@@ -71,7 +68,10 @@ def update_carac_set(request):
 
             # Save
             charac_set.save()
-            return JsonResponse({"message": f"Update done on charac_set {charac_set.id}."}, status=200)
+            return JsonResponse(
+                {"message": f"Update done on charac_set {charac_set.id}."},
+                status=200,
+            )
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
 
@@ -83,7 +83,10 @@ def add_character(request):
 
         user_nb_character = Character.objects.filter(user_id=user).count()
         if user_nb_character >= 5:
-            return JsonResponse({"error": "User cannot have more than 5 characters"}, status=403)
+            return JsonResponse(
+                {"error": "User cannot have more than 5 characters"},
+                status=403,
+            )
 
         if user:
             try:
@@ -96,9 +99,8 @@ def add_character(request):
                 return JsonResponse({"message": charac.id}, status=201)
             except Exception as e:
                 print(e)
-                return JsonResponse({"error": str(e)}, status=400)        
+                return JsonResponse({"error": str(e)}, status=400)
     return JsonResponse({"error": "Invalid request method"}, status=405)
-
 
 
 def delete_character(request):

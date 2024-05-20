@@ -4,9 +4,9 @@ from characterManager.models import (
     Character,
     CharacterClass,
     Server,
+    Set,
     SetCaracteristique,
     SetStuff,
-    Set,
 )
 
 # Register your models here.

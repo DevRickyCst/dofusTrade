@@ -1,7 +1,8 @@
-from .character_models import Character, Server, CharacterClass
-from .stuffs_models import SetCaracteristique, SetStuff, Set
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+
+from .character_models import Character, CharacterClass, Server
+from .stuffs_models import Set, SetCaracteristique, SetStuff
 
 
 @receiver(pre_save, sender=Set)
@@ -13,12 +14,11 @@ def set_default_values(sender, instance, **kwargs):
             instance.stuff = SetStuff.objects.create()
 
 
-
 @receiver(post_save, sender=Character)
 def create_related_sets(sender, instance, created, **kwargs):
     if created:
         set = Set.objects.create(character=instance)
-        print(f'Created caracteristique: {set.id}')
+        print(f"Created caracteristique: {set.id}")
 
 
 @receiver(pre_save, sender=Character)

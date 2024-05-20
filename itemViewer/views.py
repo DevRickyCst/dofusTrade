@@ -45,7 +45,7 @@ def get_and_render_all_items(request):
 
     context.update(
         {
-            "display_style": 'all_items',
+            "display_style": "all_items",
             "item_type": item_type,
             "items": items,
             "tab_var": tab_var,
@@ -62,5 +62,7 @@ def get_and_render_single_item(request, id):
     # Init client
     api = DofusDudeAPI(item_type)
     data = api.get_item_single(ankama_id=id)
-    context.update({"display_style": "solo_item", "item_type": item_type, "item": data})
+    context.update(
+        {"display_style": "solo_item", "item_type": item_type, "item": data}
+    )
     return render(request, context=context)
