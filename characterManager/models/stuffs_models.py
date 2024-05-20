@@ -1,8 +1,6 @@
 from django.db import models
 from itemViewer.models import Item
 from .character_models import Character
-from django.db.models.signals import pre_save, post_save
-from django.dispatch import receiver
 
 class SetCaracteristique(models.Model):
     """
@@ -45,12 +43,12 @@ class SetStuff(models.Model):
 class Set(models.Model):
     character = models.ForeignKey(Character,on_delete= models.CASCADE)
 
-    caracteristique = models.ForeignKey(SetCaracteristique, on_delete=models.CASCADE)
-    stuff = models.ForeignKey(SetStuff, on_delete=models.CASCADE)
+    caracteristique = models.ForeignKey(SetCaracteristique, on_delete=models.CASCADE, null=True, blank=True)
+    stuff = models.ForeignKey(SetStuff, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return ("id: " + self.id.__str__() + 
-                "< characteristique_id: " + self.caracteristique.id + 
-                ", stuff_id: " + self.stuff.id + " >")
+                "< characteristique_id: " + self.caracteristique.id.__str__() + 
+                ", stuff_id: " + self.stuff.id.__str__() + " >")
 
 

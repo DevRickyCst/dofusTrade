@@ -18,7 +18,6 @@
             </button>
         </form>
     </div>
-
     <!-- Main character info (Image and caracteristique) -->
     <div class="left col-3">
         <form id="deleteCharacterForm" method="post">
@@ -36,23 +35,7 @@
             <span class="label">Server :</span>
             <span class="value">{{ character.server.name|title  }}</span>
         </div>
-        <form id="characSetForm" method="post">
-            {% csrf_token %}
-            <h4 class="title">Caractéristiques</h4>
-            <table class="table">
-                <tbody>
-                    {% for caracteristique, value in main_character_stuff.carac.items %}
-                        <tr>
-                            <td><img src="/static/image/logo_charac/{{caracteristique}}.png">{{caracteristique|title}}</td>
-                            <td><input type="number" name="{{caracteristique}}" min="0" max="1000" value= "{{value}}"/></td>
-                        </tr>
-                    {%endfor%}
-                </tbody>
-                <input class="d-none" name="character_id" value="{{character.id}}"/>
-            </table>
-                <button type="submit" id="carac-save-btn" class="btn btn-primary mb-2">Modifier</button>
-            </form>
-
+        {% include 'character/caracteristique_tab.html' %}
     </div>
 
     <!-- Main charactere infomation + main character menu -->

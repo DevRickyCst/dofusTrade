@@ -17,15 +17,9 @@ def set_default_values(sender, instance, **kwargs):
 @receiver(post_save, sender=Character)
 def create_related_sets(sender, instance, created, **kwargs):
     if created:
-        charac = SetCaracteristique.objects.create(
-            user=instance.user, character=instance
-        )
-        print(f'Created caracteristique: {charac.id}')
+        set = Set.objects.create(character=instance)
+        print(f'Created caracteristique: {set.id}')
 
-        stuffset = SetStuff.objects.create(
-            user=instance.user, character=instance, caracteristique=charac
-        )
-        print(f'Created stuffset for character {stuffset.id}')
 
 @receiver(pre_save, sender=Character)
 def set_default_values(sender, instance, **kwargs):

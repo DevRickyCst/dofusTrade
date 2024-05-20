@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 from src.custumRender import render
-from .models import SetStuff, Character, SetCaracteristique
+from .models import Character, SetCaracteristique, Set
 from django.contrib.auth.models import User
 
 
@@ -26,19 +26,10 @@ def view_personnages(request, id=None):
 
     # Get set of carac associated with the character
     stuff = (
-        SetStuff.objects.filter(character_id=main_charact_id)
+        Set.objects.filter(character_id=main_charact_id)
         .first()
     )
 
-    # Get carac
-    carac = (
-        SetCaracteristique.objects
-        .filter(user=user,character=main_character)
-        .values(
-            "vitalite", "agilite", "chance", "force", "intelligence", "sagesse"
-        )
-        .first()
-    )
     # Other character info in order to render them
     other_charact = (
         Character.objects.filter(user_id=request.user.id)
@@ -48,8 +39,6 @@ def view_personnages(request, id=None):
         )
     )
 
-    print(carac)
-    print(stuff)
     return render(
         request,
         'base.html',
@@ -57,10 +46,7 @@ def view_personnages(request, id=None):
             "app": "character",
             "character": main_character,
             "other_charact": other_charact,
-            "main_character_stuff": {
-                "carac": carac,
-                "stuff": stuff
-            }
+            "main_character_set": stuff
         },
     )
 
@@ -69,17 +55,12 @@ def update_carac_set(request):
     """Update the caracteristique set using POST methods"""
     if (request.user.is_authenticated) & (request.method == "POST"):
         try:
-            # Create user object
-            user = User.objects.filter(pk=request.user.id).first()
-
             # Get character_id from POST value
-            character_id = request.POST.get("character_id")
-
+            caracteristique_id = request.POST.get("character_id")
             # Get Characteristique set
             charac_set = SetCaracteristique.objects.filter(
-                character_id=character_id, user=user
+                pk=caracteristique_id
             ).first()
-
             # Update value
             charac_set.vitalite = request.POST.get("vitalite")
             charac_set.agilite = request.POST.get("agilite")
