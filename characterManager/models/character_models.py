@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
-
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 class Server(models.Model):
     """
@@ -62,3 +63,12 @@ class Character(models.Model):
 
     def __str__(self):
         return "id: " + self.id.__str__() + ", name : " + self.name
+
+
+@receiver(pre_save, sender=Character)
+def set_default_values(sender, instance, **kwargs):
+    if instance._state.adding:  # Check if the instance is new
+        if not instance.server_id:
+            instance.server = Server.objects.first()
+        if not instance.character_class_id:
+            instance.character_class = CharacterClass.objects.first()

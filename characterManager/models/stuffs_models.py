@@ -1,24 +1,15 @@
-from django.contrib.auth.models import User
 from django.db import models
 from itemViewer.models import Item
-from .character_models import Character, Server, CharacterClass
+from .character_models import Character
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
-
-class CaracteristiqueSet(models.Model):
+class SetCaracteristique(models.Model):
     """
     Represents a set of caracteristique.
 
     This model stores values about each caracteristique (vitalite, sagesse ...).
-
-
     """
-
-    # Represents the user who created the caracteristique set.
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # Represents the user who created the caracteristique set.
-    character = models.ForeignKey(Character, on_delete=models.CASCADE)
     # Value of vitalite
     vitalite = models.IntegerField(default=0)
     # Value of sagesse
@@ -32,16 +23,12 @@ class CaracteristiqueSet(models.Model):
     # Value of force
     force = models.IntegerField(default=0)
 
+    def __str__(self):
+        return "id: " + self.id.__str__() 
 
-class StuffSet(models.Model):
+class SetStuff(models.Model):
     """
     """
-    # Represents the user who created the caracteristique set.
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # Represents the user who created the caracteristique set.
-    character = models.ForeignKey(Character, on_delete=models.CASCADE)
-    # Represent the caracteristique set linked to the stuffset
-    caracteristique = models.ForeignKey(CaracteristiqueSet, on_delete=models.CASCADE)
     ### STUFF
     chapeau = models.ForeignKey(Item, on_delete=models.CASCADE, null=True, related_name='stuffset_chapeau', blank=True)
     collier = models.ForeignKey(Item, on_delete=models.CASCADE, null=True, related_name='stuffset_collier', blank=True)
@@ -53,25 +40,17 @@ class StuffSet(models.Model):
     arme = models.ForeignKey(Item, on_delete=models.CASCADE, null=True, related_name='stuffset_arme', blank=True)
 
     def __str__(self):
-        return "stuff_id: " + self.id.__str__() + f", user_id : {self.user.id}, caracteristique_id : {self.caracteristique.id}"
+        return "id: " + self.id.__str__()
 
-@receiver(pre_save, sender=Character)
-def set_default_values(sender, instance, **kwargs):
-    if instance._state.adding:  # Check if the instance is new
-        if not instance.server_id:
-            instance.server = Server.objects.first()
-        if not instance.character_class_id:
-            instance.character_class = CharacterClass.objects.first()
+class Set(models.Model):
+    character = models.ForeignKey(Character,on_delete= models.CASCADE)
 
-@receiver(post_save, sender=Character)
-def create_related_sets(sender, instance, created, **kwargs):
-    if created:
-        charac = CaracteristiqueSet.objects.create(
-            user=instance.user, character=instance
-        )
-        print(f'Created caracteristique: {charac.id}')
+    caracteristique = models.ForeignKey(SetCaracteristique, on_delete=models.CASCADE)
+    stuff = models.ForeignKey(SetStuff, on_delete=models.CASCADE)
 
-        stuffset = StuffSet.objects.create(
-            user=instance.user, character=instance, caracteristique=charac
-        )
-        print(f'Created stuffset for character {instance.id}')
+    def __str__(self):
+        return ("id: " + self.id.__str__() + 
+                "< characteristique_id: " + self.caracteristique.id + 
+                ", stuff_id: " + self.stuff.id + " >")
+
+

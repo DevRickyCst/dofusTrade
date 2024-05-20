@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 from src.custumRender import render
-from .models import StuffSet, Character, CaracteristiqueSet
+from .models import SetStuff, Character, SetCaracteristique
 from django.contrib.auth.models import User
 
 
@@ -26,13 +26,13 @@ def view_personnages(request, id=None):
 
     # Get set of carac associated with the character
     stuff = (
-        StuffSet.objects.filter(character_id=main_charact_id)
+        SetStuff.objects.filter(character_id=main_charact_id)
         .first()
     )
 
     # Get carac
     carac = (
-        CaracteristiqueSet.objects
+        SetCaracteristique.objects
         .filter(user=user,character=main_character)
         .values(
             "vitalite", "agilite", "chance", "force", "intelligence", "sagesse"
@@ -76,7 +76,7 @@ def update_carac_set(request):
             character_id = request.POST.get("character_id")
 
             # Get Characteristique set
-            charac_set = CaracteristiqueSet.objects.filter(
+            charac_set = SetCaracteristique.objects.filter(
                 character_id=character_id, user=user
             ).first()
 
