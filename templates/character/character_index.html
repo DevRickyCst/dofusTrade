@@ -1,0 +1,68 @@
+{% load static %}
+
+
+<div class="character-div row">
+
+    <!-- Other character selection -->
+    <div class = "character-selection-div col-1">
+        {% for charac in other_charact %}
+            <a href="/personnages/{{charac.id}}">
+                <img class="img-other-charac" src="{{ charac.character_class__logo_url }}" alt="">
+            </a>
+            <p class="other-charac-name">{{charac.name}}</p>
+        {% endfor %}
+        <form id="addCharacterForm" method="post">
+            {% csrf_token %}
+            <button type="submit" id="add-character-btn">
+                <img class="add-perso" src="{% static 'logo/add.svg' %}" alt="Description de l'image SVG">
+            </button>
+        </form>
+    </div>
+
+    <!-- Main character info (Image and caracteristique) -->
+    <div class="left col-3">
+        <form id="deleteCharacterForm" method="post">
+            <input class="d-none" name="character_id" value="{{character.id}}"/>
+            {% csrf_token %}
+            <button type="submit" class="btn-close" aria-label="Close"></button>
+        </form>
+        <img src="{{ character.character_class.logo_url }}">
+        <h1 class="pseudo">{{ character.name|title }}</h1>
+        <div class="info-item">
+            <span class="label">Lvl :</span>
+            <span class="value">{{ character.level }}</span>
+        </div>
+        <div class="info-item">
+            <span class="label">Server :</span>
+            <span class="value">{{ character.server.name|title  }}</span>
+        </div>
+        <form id="characSetForm" method="post">
+            {% csrf_token %}
+            <h4 class="title">Caractéristiques</h4>
+            <table class="table">
+                <tbody>
+                    {% for caracteristique, value in main_character_stuff.carac.items %}
+                        <tr>
+                            <td><img src="/static/image/logo_charac/{{caracteristique}}.png">{{caracteristique|title}}</td>
+                            <td><input type="number" name="{{caracteristique}}" min="0" max="1000" value= "{{value}}"/></td>
+                        </tr>
+                    {%endfor%}
+                </tbody>
+                <input class="d-none" name="character_id" value="{{character.id}}"/>
+            </table>
+                <button type="submit" id="carac-save-btn" class="btn btn-primary mb-2">Modifier</button>
+            </form>
+
+    </div>
+
+    <!-- Main charactere infomation + main character menu -->
+    <div class="character-info col-8">
+
+        <div class="personnage-menu">
+
+            {% include 'character/pano.html' %}
+
+        </div>
+    </div>
+</div>
+

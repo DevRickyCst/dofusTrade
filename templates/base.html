@@ -12,9 +12,15 @@
     {% include 'navbar.html' %}
 
     <div class= "app_div">
-        {% block content %}
-
-        {% endblock %}
+        {% if app == 'items' %}
+            {% if display_style == 'all_items' %}
+                {% include 'items/all_items.html' %}
+            {% elif display_style == 'solo_item' %}
+                {% include 'items/solo_item.html' %}
+            {% endif %}
+        {% elif app == 'character'%}
+            {% include 'character/character_index.html' %}
+        {% endif %}
     </div>
 
   {% if user.is_authenticated %}
@@ -28,42 +34,7 @@
 
 
 <script>
-  // Attends que le document soit prêt
-  $(document).ready(function() {
-      // Écoute l'événement de soumission du formulaire
-      $('#loginForm').submit(function(e) {
-          e.preventDefault(); // Empêche la soumission par défaut du formulaire
-          
-          // Récupère les données du formulaire
-          var formData = $(this).serialize();
-          
-          // Envoie les données du formulaire au serveur
-          $.ajax({
-              type: 'POST',
-              url: '/log/login',
-              data: formData,
-              success: function(response) {
-              // Vérifie le contenu de la réponse
-              if (response['200'] === 'ok') {
-                  // Si la réponse indique une connexion réussie
-                  console.log('Connexion réussie!');
-                  window.location.href = '/';              
-              } else {
-                  // Si la réponse indique une erreur de connexion
-                  console.log('Erreur de connexion:', response['401']);
-                  $('#passwordError').show();
-                  // Affiche un message d'erreur ou effectue toute autre action nécessaire
-              }
-                // Affiche la réponse dans la console
-                console.log('Réponse du serveur:', response);
-              },
-              error: function(xhr, status, error) {
-                  // Affiche l'erreur dans la console
-                  console.error('Erreur de requête AJAX:', error);
-              }
-          });
-      });
-  });
+  
 </script>
 
 </body>

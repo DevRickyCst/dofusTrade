@@ -1,70 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
 from itemViewer.models import Item
-from django.db.models.signals import post_save
+from .character_models import Character, Server, CharacterClass
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
-
-class Server(models.Model):
-    """
-    Represents a single server class.
-
-    This model stores information about a Server.
-    """
-
-    # Represents the name of the class.
-    name = models.CharField(max_length=100, unique=True)
-
-    def __str__(self):
-        return "id: " + self.id.__str__() + ", name : " + self.name
-
-
-class CharacterClass(models.Model):
-    """
-    Represents a single character class.
-
-    This model stores information about a class.
-    """
-
-    # Represents the name of the class.
-    name = models.CharField(max_length=100, default="random", unique=True)
-    # Represents the path to the class logo.
-    logo_url = models.CharField(max_length=100, default="random")
-
-    def __str__(self):
-        return "id: " + self.id.__str__() + ", name : " + self.name
-    
-class Character(models.Model):
-    """
-    Represents a single character.
-
-    This model stores information about each character.
-    """
-
-    # Represents the name of the character.
-    name = models.CharField(max_length=100, null=False)
-    # Represents the level of the character.
-    level = models.IntegerField(default=200)
-    # Represents the server of the character.
-    default_server = Server.objects.first()
-    server = models.ForeignKey(
-        Server, on_delete=models.PROTECT, default=default_server
-    )
-    # Represents the Class of the character.
-    default_character_class = CharacterClass.objects.first()
-    character_class = models.ForeignKey(
-        CharacterClass,
-        on_delete=models.CASCADE,
-        default=default_character_class,
-    )
-    # Represents the user who created the character.
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    # Timestamp associated with the character.
-    # created_at = models.DateTimeField(auto_now_add=True, null=True)
-    # updated_at = models.DateTimeField(auto_now=True, null=True)
-
-    def __str__(self):
-        return "id: " + self.id.__str__() + ", name : " + self.name
 
 
 class CaracteristiqueSet(models.Model):
@@ -116,16 +55,23 @@ class StuffSet(models.Model):
     def __str__(self):
         return "stuff_id: " + self.id.__str__() + f", user_id : {self.user.id}, caracteristique_id : {self.caracteristique.id}"
 
-@receiver(post_save, sender=Character)
-def create_caracteristique_set(sender, instance, created, **kwargs):
-    if created:
+@receiver(pre_save, sender=Character)
+def set_default_values(sender, instance, **kwargs):
+    if instance._state.adding:  # Check if the instance is new
+        if not instance.server_id:
+            instance.server = Server.objects.first()
+        if not instance.character_class_id:
+            instance.character_class = CharacterClass.objects.first()
 
+@receiver(post_save, sender=Character)
+def create_related_sets(sender, instance, created, **kwargs):
+    if created:
         charac = CaracteristiqueSet.objects.create(
             user=instance.user, character=instance
         )
-        print(f'Created caracteristique : {charac.id}')
+        print(f'Created caracteristique: {charac.id}')
 
-        StuffSet.objects.create(
-            user = instance.user, character = instance,
-            caracteristique = charac
+        stuffset = StuffSet.objects.create(
+            user=instance.user, character=instance, caracteristique=charac
         )
+        print(f'Created stuffset for character {instance.id}')
