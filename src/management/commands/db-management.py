@@ -52,7 +52,9 @@ class Command(BaseCommand):
                 + " items"
             )
             for item in api_response.items:
-                self.insert_in_Item_Table(item, api_type)
+                full_item = self.get_API_solo_response(ankama_id=item.ankama_id, api_type=api_type)
+                print(full_item)
+                self.insert_in_Item_Table(full_item, api_type=api_type)
                 added_items += 1
             print(
                 "Added "
@@ -122,15 +124,68 @@ class Command(BaseCommand):
                     sort_level=sort_level,
                 )
 
+
+    def get_API_solo_response(self, api_type, ankama_id):
+        # Defining the host is optional and defaults to https://api.dofusdu.de
+        configuration = dofusdude.Configuration(host="https://api.dofusdu.de")
+        with dofusdude.ApiClient(configuration) as api_client:
+            # Common parameters to all API
+            language = "fr"
+            game = "dofus2"
+
+            if api_type == ApiTypeEnum.EQUIPMENT:
+                api_instance = dofusdude.EquipmentApi(api_client)
+                return api_instance.get_items_equipment_single(
+                    language,
+                    ankama_id,
+                    game,
+                )
+            if api_type == ApiTypeEnum.CONSUMABLE:
+                api_instance = dofusdude.ConsumablesApi(api_client)
+                return api_instance.get_items_consumables_single(
+                    language,
+                    ankama_id,
+                    game,
+                )
+            if api_type == ApiTypeEnum.COSMETIC:
+                api_instance = dofusdude.CosmeticsApi(api_client)
+                return api_instance.get_cosmetics_single(
+                    language,
+                    ankama_id,
+                    game,                )
+            if api_type == ApiTypeEnum.RESOURCE:
+                api_instance = dofusdude.ResourcesApi(api_client)
+                return api_instance.get_items_resources_single(
+                    language,
+                    ankama_id,
+                    game,
+                )
+
     # insert provided item in Item table, using api_type to fill categorie column
     def insert_in_Item_Table(self, item, api_type):
-        db_item = Item(
-            ankama_id=item.ankama_id,
-            name=item.name,
-            type=item.type.name,
-            level=item.level,
-            image_urls=json.loads(item.image_urls.to_json()),
-            categorie=api_type.value,
-        )
-        db_item.save()
-        self.added_items_count += 1
+        item = dict(item)
+
+        # Convert image_urls to JSON
+        item["image_urls"] = json.loads(item["image_urls"].to_json())
+
+        # Convert effects to JSON if they exist
+        if "effects" in item and item["effects"] is not None:
+            item["effects"] = json.loads(item["effects"].to_json())
+
+        # Convert type to string if it exists
+        if "type" in item and item["type"] is not None:
+            item["type"] = item["type"].name
+
+        # Drop EffectsEntry if it exists
+        if "EffectsEntry" in item:
+            item.pop("EffectsEntry")
+
+        # Set the category from api_type
+        item["categorie"] = api_type
+
+        try:
+            db_item = Item(**item)
+            db_item.save()
+            self.added_items_count += 1
+        except Exception as e:
+            print('ERROR ' + str(e))
