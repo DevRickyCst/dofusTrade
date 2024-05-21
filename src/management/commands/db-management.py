@@ -52,7 +52,9 @@ class Command(BaseCommand):
                 + " items"
             )
             for item in api_response.items:
-                full_item = self.get_API_solo_response(ankama_id=item.ankama_id, api_type=api_type)
+                full_item = self.get_API_solo_response(
+                    ankama_id=item.ankama_id, api_type=api_type
+                )
                 print(full_item)
                 self.insert_in_Item_Table(full_item, api_type=api_type)
                 added_items += 1
@@ -124,7 +126,6 @@ class Command(BaseCommand):
                     sort_level=sort_level,
                 )
 
-
     def get_API_solo_response(self, api_type, ankama_id):
         # Defining the host is optional and defaults to https://api.dofusdu.de
         configuration = dofusdude.Configuration(host="https://api.dofusdu.de")
@@ -152,7 +153,8 @@ class Command(BaseCommand):
                 return api_instance.get_cosmetics_single(
                     language,
                     ankama_id,
-                    game,                )
+                    game,
+                )
             if api_type == ApiTypeEnum.RESOURCE:
                 api_instance = dofusdude.ResourcesApi(api_client)
                 return api_instance.get_items_resources_single(
@@ -188,4 +190,4 @@ class Command(BaseCommand):
             db_item.save()
             self.added_items_count += 1
         except Exception as e:
-            print('ERROR ' + str(e))
+            print("ERROR " + str(e))
