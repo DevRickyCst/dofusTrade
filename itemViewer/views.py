@@ -4,7 +4,7 @@ from itemViewer.dofusdudes import DofusDudeAPI
 from itemViewer.models import Item
 from src.custumRender import render
 
-app_name = "item"
+app_name = "items"
 
 context = {"app": app_name}
 
@@ -17,7 +17,7 @@ tab_var = {
 
 
 def index(request):
-    return render(request, "index.html", context=context)
+    return render(request, context=context)
 
 
 def get_and_render_all_items(request):
@@ -45,134 +45,24 @@ def get_and_render_all_items(request):
 
     context.update(
         {
+            "display_style": "all_items",
             "item_type": item_type,
             "items": items,
             "tab_var": tab_var,
         }
     )
-    return render(request, "all_items.html", context=context)
+    print(context)
+    return render(request, context=context)
 
 
 def get_and_render_single_item(request, id):
     """Render HTML template 'solo_item.html' with correct context"""
     # Use url to know the item type and add missing s
     item_type = f"{resolve(request.path_info).url_name}s"
-
     # Init client
     api = DofusDudeAPI(item_type)
     data = api.get_item_single(ankama_id=id)
-    context.update({"item_type": item_type, "item": data})
-    return render(request, "solo_item.html", context=context)
-
-
-def test_item(request):
-
-    hello = list(Item.objects.all().values())
     context.update(
-        {
-            #    'items': hello
-        }
+        {"display_style": "solo_item", "item_type": item_type, "item": data}
     )
-    return render(request, "all_items.html", context=context)
-
-
-def insert_resources(request):
-
-    api = DofusDudeAPI("resources")
-    data = api.get_all_item().items
-    for item in data:
-        correct_item = item.to_dict()
-        correct_item.update({"categorie": "resources"})
-        pk = correct_item.get("ankama_id")
-        itemq, created = Item.objects.get_or_create(
-            pk=pk, defaults=correct_item
-        )
-        # If the item already exists, update its fields with the new data
-        if not created:
-            for key, value in correct_item.items():
-                setattr(itemq, key, value)
-            itemq.save()
-        try:
-            itemq.save()
-        except Exception as e:
-            print(e)
-
-    return render(request, "index.html", context=context)
-
-
-def insert_equipments(request):
-
-    api = DofusDudeAPI("equipments")
-    data = api.get_all_item(maxx=1).items
-    for item in data:
-        print()
-        correct_item = item.to_dict()
-        correct_item.update({"categorie": "equipments"})
-        pk = correct_item.get("ankama_id")
-        itemq, created = Item.objects.get_or_create(
-            pk=pk, defaults=correct_item
-        )
-        # If the item already exists, update its fields with the new data
-        if not created:
-            for key, value in correct_item.items():
-                setattr(itemq, key, value)
-            itemq.save()
-        try:
-            itemq.save()
-        except Exception as e:
-            print(e)
-
-    return render(request, "index.html", context=context)
-
-
-def insert_cosmetics(request):
-
-    api = DofusDudeAPI("cosmetics")
-
-    data = api.get_all_item().items
-    for item in data:
-        correct_item = item.to_dict()
-        correct_item.update({"categorie": "cosmetics"})
-        pk = correct_item.get("ankama_id")
-        itemq, created = Item.objects.get_or_create(
-            pk=pk, defaults=correct_item
-        )
-        # If the item already exists, update its fields with the new data
-        if not created:
-            for key, value in correct_item.items():
-                setattr(itemq, key, value)
-            itemq.save()
-        try:
-            itemq.save()
-        except Exception as e:
-            print(e)
-
-    return render(request, "index.html", context=context)
-
-
-def insert_consumables(request):
-
-    api = DofusDudeAPI("consumables")
-    for i in range(20):
-        print(10 + (i * 10), 1 + (i * 10))
-        data = api.get_item_list(
-            lvl_max=(10 + (i * 10)), lvl_min=1 + (i * 10)
-        ).items
-        for item in data:
-            correct_item = item.to_dict()
-            correct_item.update({"categorie": "consumables"})
-            pk = correct_item.get("ankama_id")
-            itemq, created = Item.objects.get_or_create(
-                pk=pk, defaults=correct_item
-            )
-            # If the item already exists, update its fields with the new data
-            if not created:
-                for key, value in correct_item.items():
-                    setattr(itemq, key, value)
-                itemq.save()
-            try:
-                itemq.save()
-            except Exception as e:
-                print(e)
-
-    return render(request, "index.html", context=context)
+    return render(request, context=context)
