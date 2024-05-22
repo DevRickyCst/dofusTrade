@@ -1,10 +1,9 @@
+
 window.addEventListener("load", function() {
     if (!document.getElementById('title-navbar-expand')) {
         var searchInput = document.getElementsByClassName('navbar-search-retracted');
-        searchInput[0].style.transition = 'opacity 0s';
         searchInput[0].style.opacity = 1;
     }
-    searchInput[0].style.transition = 'background 0.7s';
 });
 
 window.addEventListener('scroll', function() {

@@ -1,7 +1,6 @@
 .charactere-btn {
-    position: fixed;
-    bottom: 50px;
-    right: 50px;
+    position: absolute;
+    right: -150px;
     background-color: $y-color; /* Couleur de fond */
     color: $db-color; /* Couleur du texte */
     padding: 10px 20px; /* Espacement à l'intérieur du bouton */

@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -23,22 +25,18 @@
         {% else %}
             {% include 'index.html' %}
         {% endif %}
+
+        {% if user.is_authenticated %}
+            <button class="charactere-btn" id="charactere-btn" data-bs-toggle="modal" data-bs-target="#charactereModal">
+                Personnages
+            </button>
+        {% endif %}
     </div>
 
-  {% if user.is_authenticated %}
-    <button class="charactere-btn" data-bs-toggle="modal" data-bs-target="#charactereModal">
-        Personnages
-    </button>
-  {% endif %}
+    {% include 'modals/login.html' %}
+    {% include 'modals/personnage.html' %}
 
-  {% include 'modals/login.html' %}
-  {% include 'modals/personnage.html' %}
-
-
-<script>
-  
-</script>
-
+    <script src="{% static 'js/base.js' %}"></script>
 </body>
 </html>
 
