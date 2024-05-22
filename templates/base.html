@@ -20,6 +20,8 @@
             {% endif %}
         {% elif app == 'character'%}
             {% include 'character/character_index.html' %}
+        {% else %}
+            {% include 'index.html' %}
         {% endif %}
     </div>
 
