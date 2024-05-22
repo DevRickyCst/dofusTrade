@@ -50,7 +50,7 @@ def get_and_render_all_items(request):
     )
     items = Item.objects.filter(
         category=categorie, level__lte=lvl_max, level__gte=lvl_min
-    ).values()[page_size * (page_number - 1) : page_size * (page_number)]
+    ).select_related('type', 'image_urls')[page_size * (page_number - 1) : page_size * (page_number)]
 
     context.update(
         {
