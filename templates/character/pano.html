@@ -1,0 +1,42 @@
+
+
+<div class="pano-div">
+    <h4 class="title">Panoplie</h4>
+        <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-4">
+            <button><img src="{{ main_character_set.stuff.chapeau.image_urls.icon }}" alt="collier_image" data-bs-toggle="modal" data-bs-target="#itemsSelectionsModal"></button>
+        </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-4 ">
+                <button><img src="{{ main_character_set.stuff.collier.image_urls.icon }}" alt="collier_image" data-bs-toggle="modal" data-bs-target="#itemsSelectionsModal"></button>
+            </div>
+          </div>
+        <div class="row justify-content-between">
+            <div class="col-4">
+                <button><img src="{{ main_character_set.stuff.anneau_1.image_urls.icon }}" alt="collier_image" data-bs-toggle="modal" data-bs-target="#itemsSelectionsModal"></button>
+            </div>
+            <div class="col-4">
+                <button><img src="{{ main_character_set.stuff.anneau_2.image_urls.icon }}" alt="collier_image" data-bs-toggle="modal" data-bs-target="#itemsSelectionsModal"></button>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <button><img src="{{ main_character_set.stuff.arme.image_urls.icon }}" alt="collier_image" data-bs-toggle="modal" data-bs-target="#itemsSelectionsModal"></button>
+            </div>
+            <div class="col-4">
+                <button><img src="{{ main_character_set.stuff.ceinture.image_urls.icon }}" alt="collier_image" data-bs-toggle="modal" data-bs-target="#itemsSelectionsModal"></button>
+            </div>
+            <div class="col-4">
+                <button><img src="{{ main_character_set.stuff.bouclier.image_urls.icon }}" alt="collier_image" data-bs-toggle="modal" data-bs-target="#itemsSelectionsModal"></button>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-4">
+                <button><img src="{{ main_character_set.stuff.botte.image_urls.icon }}" alt="collier_image" data-bs-toggle="modal" data-bs-target="#itemsSelectionsModal"></button>
+            </div>
+          </div>
+      </div>
+      {% include '../modals/items_selection.html' %}
+</div>

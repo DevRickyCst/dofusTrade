@@ -1,0 +1,34 @@
+<form id="characSetForm" method="post">
+    {% csrf_token %}
+    <h4 class="title">Caractéristiques</h4>
+    <table class="table">
+        <tbody>
+                <tr>
+                    <td><img src="/static/image/logo_charac/vitalite.png"></td>
+                    <td><input type="number" name="vitalite" min="0" max="1000" value= "{{ main_character_set.caracteristique.vitalite }}"/></td>
+                </tr>
+                <tr>
+                    <td><img src="/static/image/logo_charac/sagesse.png"></td>
+                    <td><input type="number" name="sagesse" min="0" max="1000" value= "{{ main_character_set.caracteristique.sagesse }}"/></td>
+                </tr>
+                <tr>
+                    <td><img src="/static/image/logo_charac/agilite.png"></td>
+                    <td><input type="number" name="agilite" min="0" max="1000" value= "{{ main_character_set.caracteristique.agilite }}"/></td>
+                </tr>
+                <tr>
+                    <td><img src="/static/image/logo_charac/intelligence.png"></td>
+                    <td><input type="number" name="intelligence" min="0" max="1000" value= "{{ main_character_set.caracteristique.intelligence }}"/></td>
+                </tr>
+                <tr>
+                    <td><img src="/static/image/logo_charac/chance.png"></td>
+                    <td><input type="number" name="chance" min="0" max="1000" value= "{{ main_character_set.caracteristique.chance }}"/></td>
+                </tr>
+                <tr>
+                    <td><img src="/static/image/logo_charac/force.png"></td>
+                    <td><input type="number" name="force" min="0" max="1000" value= "{{ main_character_set.caracteristique.force }}"/></td>
+                </tr>
+        </tbody>
+        <input class="d-none" name="character_id" value="{{main_character_set.caracteristique.id}}"/>
+    </table>
+        <button type="submit" id="carac-save-btn" class="btn btn-primary mb-2">Modifier</button>
+    </form>

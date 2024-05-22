@@ -1,9 +1,5 @@
-import json
-
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 
 class Server(models.Model):
@@ -48,16 +44,18 @@ class Character(models.Model):
     # Represents the level of the character.
     level = models.IntegerField(default=200)
     # Represents the server of the character.
-    default_server = Server.objects.first()
     server = models.ForeignKey(
-        Server, on_delete=models.PROTECT, default=default_server
+        Server,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
     )
     # Represents the Class of the character.
-    default_character_class = CharacterClass.objects.first()
     character_class = models.ForeignKey(
         CharacterClass,
         on_delete=models.CASCADE,
-        default=default_character_class,
+        null=True,
+        blank=True,
     )
     # Represents the user who created the character.
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -68,42 +66,3 @@ class Character(models.Model):
 
     def __str__(self):
         return "id: " + self.id.__str__() + ", name : " + self.name
-
-
-class CaracteristiqueSetClass(models.Model):
-    """
-    Represents a set of caracteristique.
-
-    This model stores values about each caracteristique (vitalite, sagesse ...).
-
-
-    """
-
-    # Represents the user who created the caracteristique set.
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # Represents the user who created the caracteristique set.
-    character_id = models.ForeignKey(Character, on_delete=models.CASCADE)
-    # Value of vitalite
-    vitalite = models.IntegerField(default=0)
-    # Value of sagesse
-    sagesse = models.IntegerField(default=0)
-    # Value of agilite
-    agilite = models.IntegerField(default=0)
-    # Value of intelligence
-    intelligence = models.IntegerField(default=0)
-    # Value of chance
-    chance = models.IntegerField(default=0)
-    # Value of force
-    force = models.IntegerField(default=0)
-
-    def to_json(self):
-        return json.dumps(
-            {
-                "vitalite": self.vitalite,
-                "agilite": self.agilite,
-                "chance": self.chance,
-                "force": self.force,
-                "intelligence": self.intelligence,
-                "sagesse": self.sagesse,
-            }
-        )
