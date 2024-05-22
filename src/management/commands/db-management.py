@@ -8,7 +8,7 @@ import requests
 from django.core.management.base import BaseCommand, CommandError
 from dofusdude.rest import ApiException
 
-from itemViewer.models import Item
+from itemViewer.models import Item, Itemtype, ImageUrls, Recipe, Effects, ItemCategory
 from src.management.commands.__ApiTypeEnum import ApiTypeEnum as ApiTypeEnum
 
 # This class is a custom django-admin command, created to managebasic tasks on the database
@@ -25,11 +25,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.clean_db()
+        self.call_right_api(ItemCategory.EQUIPMENT)
 
-        self.call_right_api(ApiTypeEnum.CONSUMABLE)
-        self.call_right_api(ApiTypeEnum.COSMETIC)
-        self.call_right_api(ApiTypeEnum.RESOURCE)
-        self.call_right_api(ApiTypeEnum.EQUIPMENT)
+        self.call_right_api(ItemCategory.CONSUMABLE)
+        self.call_right_api(ItemCategory.COSMETIC)
+        self.call_right_api(ItemCategory.RESOURCE)
 
         print(
             "Added a Total of "
@@ -52,12 +52,79 @@ class Command(BaseCommand):
                 + " items"
             )
             for item in api_response.items:
-                full_item = self.get_API_solo_response(
-                    ankama_id=item.ankama_id, api_type=api_type
-                )
-                print(full_item)
-                self.insert_in_Item_Table(full_item, api_type=api_type)
-                added_items += 1
+                try:
+                    full_item = self.get_API_solo_response(
+                        ankama_id=item.ankama_id, api_type=api_type
+                    )
+
+                    item_type = full_item.type.to_dict()
+                    item_type_instance, created = Itemtype.objects.get_or_create(id=item_type['id'],name=item_type['name'])
+                    
+                    image_Urls = full_item.image_urls.to_dict()
+                    imageUrls = ImageUrls.objects.create(
+                        icon = image_Urls['icon'],
+                        sd = image_Urls['sd'],
+                        hq = image_Urls['hq'],
+                        hd = image_Urls['hd'],
+                    )
+
+                    list_recipe = []
+                    if full_item.recipe != None:
+                        for recip in full_item.recipe:
+                            recipe = Recipe.objects.create(
+                                item_ankama_id = recip.item_ankama_id,
+                                item_subtype = recip.item_subtype,
+                                quantity = recip.quantity
+                            )
+                            list_recipe.append(recipe)
+                
+                    list_effects = []
+                    if full_item.effects != None:
+                        for _effect in full_item.effects:
+                            effect = Effects.objects.create(
+                                int_minimum = _effect.int_minimum,
+                                int_maximum = _effect.int_maximum,
+                                ignore_int_min = _effect.ignore_int_min,
+                                ignore_int_max = _effect.ignore_int_max,
+                                formatted = _effect.formatted,
+                            )
+                            list_effects.append(effect)
+
+                    items_params = {
+                        'ankama_id': full_item.ankama_id,
+                        'category': api_type,
+                        'type': item_type_instance,
+                        'name': full_item.name,
+                        'description': full_item.description,
+                        'level': full_item.level,
+                        'pods': full_item.pods,
+                        'image_urls': imageUrls,
+                    }
+                    if full_item.ap_cost:
+                        items_params['ap_cost'] = full_item.ap_cost
+                    #if full_item.range:
+                    #    items_params['range'] = full_item.range
+                    if full_item.max_cast_per_turn:
+                        items_params['max_cast_per_turn'] = full_item.max_cast_per_turn
+                    if full_item.is_weapon:
+                        items_params['is_weapon'] = full_item.is_weapon
+                    if full_item.is_two_handed:
+                        items_params['is_two_handed'] = full_item.is_two_handed
+                    if full_item.critical_hit_probability:
+                        items_params['critical_hit_probability'] = full_item.critical_hit_probability
+                    if full_item.critical_hit_bonus:
+                        items_params['critical_hit_bonus'] = full_item.critical_hit_bonus
+
+                    item = Item.objects.create(**items_params)
+
+                    for effecst in list_effects:
+                        item.effects.add(effecst)
+                    for rcsp in list_recipe:
+                        item.recipe.add(rcsp)
+
+                    added_items += 1
+                except Exception as e:
+                    print(f'API BY id fail for ankama_id {item.ankama_id} excep as {e}')
             print(
                 "Added "
                 + added_items.__str__()
@@ -87,7 +154,7 @@ class Command(BaseCommand):
             page_size = -1
             page_number = 1
 
-            if api_type == ApiTypeEnum.EQUIPMENT:
+            if api_type == ItemCategory.EQUIPMENT:
                 api_instance = dofusdude.EquipmentApi(api_client)
                 fields_item = [""]
                 filter_min_level = 0
@@ -102,7 +169,7 @@ class Command(BaseCommand):
                     filter_max_level=filter_max_level,
                     fields_item=fields_item,
                 )
-            if api_type == ApiTypeEnum.CONSUMABLE:
+            if api_type == ItemCategory.CONSUMABLE:
                 api_instance = dofusdude.ConsumablesApi(api_client)
                 return api_instance.get_items_consumables_list(
                     language,
@@ -111,14 +178,14 @@ class Command(BaseCommand):
                     page_size=page_size,
                     page_number=page_number,
                 )
-            if api_type == ApiTypeEnum.COSMETIC:
+            if api_type == ItemCategory.COSMETIC:
                 api_instance = dofusdude.CosmeticsApi(api_client)
                 return api_instance.get_all_cosmetics_list(
                     language,
                     game,
                     sort_level=sort_level,
                 )
-            if api_type == ApiTypeEnum.RESOURCE:
+            if api_type == ItemCategory.RESOURCE:
                 api_instance = dofusdude.ResourcesApi(api_client)
                 return api_instance.get_all_items_resources_list(
                     language,
@@ -134,60 +201,31 @@ class Command(BaseCommand):
             language = "fr"
             game = "dofus2"
 
-            if api_type == ApiTypeEnum.EQUIPMENT:
+            if api_type == ItemCategory.EQUIPMENT:
                 api_instance = dofusdude.EquipmentApi(api_client)
                 return api_instance.get_items_equipment_single(
                     language,
                     ankama_id,
                     game,
                 )
-            if api_type == ApiTypeEnum.CONSUMABLE:
+            if api_type == ItemCategory.CONSUMABLE:
                 api_instance = dofusdude.ConsumablesApi(api_client)
                 return api_instance.get_items_consumables_single(
                     language,
                     ankama_id,
                     game,
                 )
-            if api_type == ApiTypeEnum.COSMETIC:
+            if api_type == ItemCategory.COSMETIC:
                 api_instance = dofusdude.CosmeticsApi(api_client)
                 return api_instance.get_cosmetics_single(
                     language,
                     ankama_id,
                     game,
                 )
-            if api_type == ApiTypeEnum.RESOURCE:
+            if api_type == ItemCategory.RESOURCE:
                 api_instance = dofusdude.ResourcesApi(api_client)
                 return api_instance.get_items_resources_single(
                     language,
                     ankama_id,
                     game,
                 )
-
-    # insert provided item in Item table, using api_type to fill categorie column
-    def insert_in_Item_Table(self, item, api_type):
-        item = dict(item)
-
-        # Convert image_urls to JSON
-        item["image_urls"] = json.loads(item["image_urls"].to_json())
-
-        # Convert effects to JSON if they exist
-        if "effects" in item and item["effects"] is not None:
-            item["effects"] = json.loads(item["effects"].to_json())
-
-        # Convert type to string if it exists
-        if "type" in item and item["type"] is not None:
-            item["type"] = item["type"].name
-
-        # Drop EffectsEntry if it exists
-        if "EffectsEntry" in item:
-            item.pop("EffectsEntry")
-
-        # Set the category from api_type
-        item["categorie"] = api_type
-
-        try:
-            db_item = Item(**item)
-            db_item.save()
-            self.added_items_count += 1
-        except Exception as e:
-            print("ERROR " + str(e))

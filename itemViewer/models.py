@@ -3,10 +3,10 @@ from django.db import models
 
 
 class ItemCategory(models.TextChoices):
-    COSMETICS = "0", "consumables"
-    EQUIPMENT = "1", "equipments"
-    COSMETIC = "2", "cosmetics"
-    RESOURCE = "3", "resources"
+    CONSUMABLE = "consumables"
+    EQUIPMENT = "equipments"
+    COSMETIC = "cosmetics"
+    RESOURCE = "resources"
 
 
 class Itemtype(models.Model):
@@ -29,7 +29,7 @@ class ImageUrls(models.Model):
 class Recipe(models.Model):
 
     item_ankama_id = models.IntegerField()
-    item_subtype = models.ForeignKey(Itemtype, on_delete=models.PROTECT)
+    item_subtype = models.CharField(max_length=200)
     quantity = models.IntegerField(default=1)
 
     def __str__(self):
@@ -50,12 +50,12 @@ class Effects(models.Model):
 class Item(models.Model):
     ankama_id = models.IntegerField(primary_key=True, default=1)
 
-    category = models.CharField(max_length=2, choices=ItemCategory.choices)
-    type = models.ForeignKey(Itemtype, on_delete=models.PROTECT)
+    category = models.CharField(max_length=20, choices=ItemCategory.choices)
+    type = models.ForeignKey(Itemtype, on_delete=models.CASCADE)
 
     # Global
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000, default=None, null=True)
+    description = models.CharField(max_length=1000)
     level = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(200)]
     )
@@ -72,8 +72,8 @@ class Item(models.Model):
     critical_hit_bonus = models.IntegerField(default=None, null=True)
 
     # Conditionnal
-    effects = models.ManyToManyField(Effects)
-    recipe = models.ManyToManyField(Recipe)
+    effects = models.ManyToManyField(Effects, default=None)
+    recipe = models.ManyToManyField(Recipe, default=None)
     # conditions = models.JSONField(default=None, null=True)
     # parent_set = models.IntegerField(default=None, null=True)
     # condition_tree = models.IntegerField(default=None, null=True)

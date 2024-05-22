@@ -1,5 +1,4 @@
 <h1 class="title"> Liste des {{ item_type }}</h1>
-{{ tab_var }}
 
 <div class="row justify-content-start">
     <!-- Tableau items-->
@@ -16,9 +15,9 @@
             {% for item in items %}
             <tbody>
                 <tr>
-                  <th scope="row"><img src="{{item.image_urls.icon}}"></th>
+                  <th scope="row"><img src="{{item.image_urls.image_urls.icon}}"></th>
                   <td><a href="{{item_type}}/{{ item.ankama_id }}">{{ item.name }}</a></td>
-                  <td>{{ item.ankama_id }}{{ item.type }}</td>
+                  <td>{{ item }}</td>
                   <td>Lvl: {{ item.level }}</td>
                 </tr>
             </tbody>
