@@ -3,7 +3,7 @@
 <script src="{% static 'js/components/navbar.js' %}"></script>
 
 <div class="div-nav-bar {% if navbar == 'expend' %}expend{%endif%} container-fluid">
-  <div class="navbar-background {% if navbar == 'expend' %}expend{%endif%}"></div>
+  <div class="navbar-background {% if navbar == 'expend' %}navbar-background-expend{%endif%}"></div>
   <nav class="navbar navbar-expand-lg sticky-top" >
    <div class="container-fluid">
     <!-- Home button-->
@@ -62,9 +62,10 @@
     </div>
   </nav>
   {% if navbar == 'expend' %}
+  <!-- Title -->
   <h1 class="title-navbar-expand" id="title-navbar-expand"> Dofus Graal</h1>
-
-  <div class="search_div" id="search_div" >
+  <!-- Search Box -->
+  <div class="search_div container" id="search_div" >
 
     <form>
       <label for="exampleInputEmail1" class="form-label" id="search-label">Looking for something ?</label>

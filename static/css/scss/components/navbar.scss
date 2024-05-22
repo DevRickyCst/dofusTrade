@@ -1,11 +1,16 @@
 .navbar-background {
     background-image: url("../../image/dofus-background.jpeg");
     background-size: cover;
-    position: absolute;
     height: 160px;
     width : 100%;
     z-index: -1;
-    box-shadow: 0 0 2px black;
+    margin-bottom: -160px;
+    box-shadow: -1px 0px 2px black;
+}
+
+.navbar-background-expend{
+    height: $index-img-size;
+    margin-bottom: -$index-img-size;
 }
 
 .div-nav-bar {
@@ -71,14 +76,10 @@
     font-size: 128px;
     color: $y-color;
     font-family: "Jacques Francois Shadow", serif;
-    margin-bottom: 100px;
+    margin-bottom: 150px;
 }
 
 .search_div {
-    position: absolute;
-    top: $index-img-size;
-    left: 50%;
-    transform: translate(-50%, -50%);
     width: 600px;
     height: 150px;
     background-color: $gb-color;
@@ -90,19 +91,11 @@
 }
 
 .search_div label{
-    position : absolute;
-    top: 5px;
-    width: 400px;
+    width: 100%;
     font-size: 32px;
     color: $db-color;
-    transform: translate(-50%, 0%);
-    left: 50%;
     text-align: center;
     transition: all 0.3s;
-}
-
-.search_div input {
-    margin-top: 55px;
 }
 
 //Expanded navbar search input
