@@ -1,20 +1,21 @@
 body{
-    background-color:  #F7F6CF;
+    background-color:  $o-color;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 .app_div{
-    width: 70%;
+    width: 1100px;
     margin: auto;
     padding: 1em;
     background-color: white;
     border-radius: 30px;
     padding-bottom: 250px;
+    position: relative;
 }
 .app_div .title{
     text-align: center;
     padding: 1em;
 }
-
 
 .form {
     width: 80%;
@@ -48,4 +49,3 @@ body{
     border-radius: 30px;
     height: fit-content;
 }
-
