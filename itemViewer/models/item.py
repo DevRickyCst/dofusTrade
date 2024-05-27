@@ -1,6 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from .items_meta import Itemtype, ItemCategory, ImageUrls, Recipe, Effects
+
+from .items_meta import EffectSingle, ImageUrls, ItemCategory, Itemtype, RecipeSingle
 
 
 class Item(models.Model):
@@ -28,8 +29,8 @@ class Item(models.Model):
     critical_hit_bonus = models.IntegerField(default=None, null=True)
 
     # Conditionnal
-    effects = models.ManyToManyField(Effects, default=None)
-    recipe = models.ManyToManyField(Recipe, default=None)
+    effects = models.ManyToManyField(EffectSingle, related_name="effects")
+    recipe = models.ManyToManyField(RecipeSingle, related_name="recipes")
     # conditions = models.JSONField(default=None, null=True)
     # parent_set = models.IntegerField(default=None, null=True)
     # condition_tree = models.IntegerField(default=None, null=True)

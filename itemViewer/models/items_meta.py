@@ -25,7 +25,7 @@ class ImageUrls(models.Model):
         return "id: " + self.id.__str__()
 
 
-class Recipe(models.Model):
+class RecipeSingle(models.Model):
 
     item_ankama_id = models.IntegerField()
     item_subtype = models.CharField(max_length=200)
@@ -35,7 +35,7 @@ class Recipe(models.Model):
         return "id: " + self.id.__str__()
 
 
-class Effects(models.Model):
+class EffectSingle(models.Model):
     int_minimum = models.IntegerField(default=0)
     int_maximum = models.IntegerField(default=0)
     ignore_int_min = models.BooleanField(default=False)

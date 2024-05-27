@@ -24,15 +24,14 @@ def get_and_render_all_items(request):
     """Render HTML template 'all_items.html' with correct context"""
     # Use url to know the item type
     item_type = resolve(request.path_info).url_name
-    if item_type == 'resources':
+    if item_type == "resources":
         categorie = ItemCategory.RESOURCE
-    elif item_type == 'consumables':
+    elif item_type == "consumables":
         categorie = ItemCategory.CONSUMABLE
-    elif item_type == 'equipments':
+    elif item_type == "equipments":
         categorie = ItemCategory.EQUIPMENT
-    elif item_type == 'cosmetics':
+    elif item_type == "cosmetics":
         categorie = ItemCategory.COSMETIC
-
 
     # filter
     lvl_max = int(request.GET.get("lvl_max", 200))
@@ -50,7 +49,9 @@ def get_and_render_all_items(request):
     )
     items = Item.objects.filter(
         category=categorie, level__lte=lvl_max, level__gte=lvl_min
-    ).select_related('type', 'image_urls')[page_size * (page_number - 1) : page_size * (page_number)]
+    ).select_related("type", "image_urls")[
+        page_size * (page_number - 1) : page_size * (page_number)
+    ]
 
     context.update(
         {
