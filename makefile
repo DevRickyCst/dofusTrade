@@ -4,8 +4,8 @@ local:
 import-statics:
 	python manage.py insert_statics
 
-filldb:
-	python manage.py db-management
+import-items:
+	python manage.py db-management --delete
 
 lint:
 	black .

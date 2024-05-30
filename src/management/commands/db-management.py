@@ -1,22 +1,10 @@
-import json
-from datetime import date
-from pprint import pprint
+from django.core.management.base import BaseCommand
 
-import dofusdude
-import dofusdude.api_client
-import requests
-from django.core.management.base import BaseCommand, CommandError
-from dofusdude.rest import ApiException
-
-from itemViewer.models import (
-    EffectSingle,
-    ImageUrls,
-    Item,
-    ItemCategory,
-    Itemtype,
-    RecipeSingle,
-)
+from itemViewer.models import ItemCategory
 from src.management.commands.__ApiTypeEnum import ApiTypeEnum as ApiTypeEnum
+
+from .db_utils import clean_db, insert_item
+from .dofusdudeClient import DofusdudeClient
 
 # This class is a custom django-admin command, created to managebasic tasks on the database
 # Calling it will clean every entry in in the Item Table and repopulate it using dofusdu.de api
@@ -26,225 +14,69 @@ class Command(BaseCommand):
     help = "Manage the database"
     added_items_count = 0
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.client = DofusdudeClient()
+
     def add_arguments(self, parser):
-        # nothing
-        print()
-
-    def handle(self, *args, **options):
-        self.clean_db()
-        self.call_right_api(ItemCategory.EQUIPMENT)
-
-        self.call_right_api(ItemCategory.CONSUMABLE)
-        self.call_right_api(ItemCategory.COSMETIC)
-        self.call_right_api(ItemCategory.RESOURCE)
-
-        print(
-            "Added a Total of "
-            + self.added_items_count.__str__()
-            + " items to db"
+        parser.add_argument(
+            "--delete",
+            action='store_true',
+            help="Delete all item before inserting",
+        )
+        parser.add_argument(
+            "--ankama-id", nargs="?", type=int, help="Add a single Ankama Id"
         )
 
-    # Call get_API_response() to retrieve all items according to api_type, for each item call insert_in_Item_Table()
-    def call_right_api(self, api_type):
-        added_items = 0
-        try:
-            api_response = self.get_API_response(api_type)
-            print(
-                "The response of "
-                + api_type.name
-                + " API contains "
-                + len(api_response.items).__str__()
-                + " "
-                + api_type.name
-                + " items"
+        parser.add_argument(
+            "--category",
+            nargs="?",
+            type=str,
+            choices=["consumables", "equipments", "cosmetics", "resources"],
+            help="Import only one category. Choices are: 'consumable', 'equipment', 'cosmetic', 'resource'",
+        )
+
+    def handle(self, *args, **options):
+
+        if options["category"]:
+            categories = [ItemCategory(options["category"])]
+        else:
+            categories = [
+                ItemCategory.CONSUMABLE,
+                ItemCategory.EQUIPMENT,
+                ItemCategory.COSMETIC,
+                ItemCategory.RESOURCE
+            ]
+        ankama_id = options.get("ankama_id", None)
+
+        print(options["delete"])
+        if options["delete"]:
+            clean_db()
+        exit()
+        for category in categories:
+            self.get_full_data_and_save(
+                self.client.get_API_response(category),
+                category,
             )
-            for item in api_response.items:
-                try:
-                    full_item = self.get_API_solo_response(
-                        ankama_id=item.ankama_id, api_type=api_type
-                    )
 
-                    item_type = full_item.type.to_dict()
-                    item_type_instance, created = (
-                        Itemtype.objects.get_or_create(
-                            id=item_type["id"], name=item_type["name"]
-                        )
-                    )
-
-                    image_Urls = full_item.image_urls.to_dict()
-                    imageUrls = ImageUrls.objects.create(
-                        icon=image_Urls["icon"],
-                        sd=image_Urls["sd"],
-                        hq=image_Urls["hq"],
-                        hd=image_Urls["hd"],
-                    )
-
-                    list_recipe = []
-                    if full_item.recipe != None:
-                        for recip in full_item.recipe:
-                            recipe = RecipeSingle.objects.create(
-                                item_ankama_id=recip.item_ankama_id,
-                                item_subtype=recip.item_subtype,
-                                quantity=recip.quantity,
-                            )
-                            list_recipe.append(recipe)
-
-                    list_effects = []
-                    if full_item.effects != None:
-                        for _effect in full_item.effects:
-                            effect = EffectSingle.objects.create(
-                                int_minimum=_effect.int_minimum,
-                                int_maximum=_effect.int_maximum,
-                                ignore_int_min=_effect.ignore_int_min,
-                                ignore_int_max=_effect.ignore_int_max,
-                                formatted=_effect.formatted,
-                            )
-                            list_effects.append(effect)
-
-                    items_params = {
-                        "ankama_id": full_item.ankama_id,
-                        "category": api_type,
-                        "type": item_type_instance,
-                        "name": full_item.name,
-                        "description": full_item.description,
-                        "level": full_item.level,
-                        "pods": full_item.pods,
-                        "image_urls": imageUrls,
-                    }
-                    if full_item.ap_cost:
-                        items_params["ap_cost"] = full_item.ap_cost
-                    # if full_item.range:
-                    #    items_params['range'] = full_item.range
-                    if full_item.max_cast_per_turn:
-                        items_params["max_cast_per_turn"] = (
-                            full_item.max_cast_per_turn
-                        )
-                    if full_item.is_weapon:
-                        items_params["is_weapon"] = full_item.is_weapon
-                    if full_item.is_two_handed:
-                        items_params["is_two_handed"] = full_item.is_two_handed
-                    if full_item.critical_hit_probability:
-                        items_params["critical_hit_probability"] = (
-                            full_item.critical_hit_probability
-                        )
-                    if full_item.critical_hit_bonus:
-                        items_params["critical_hit_bonus"] = (
-                            full_item.critical_hit_bonus
-                        )
-
-                    item = Item.objects.create(**items_params)
-
-                    for effecst in list_effects:
-                        item.effects.add(effecst)
-                    for rcsp in list_recipe:
-                        item.recipe.add(rcsp)
-
-                    added_items += 1
-                except Exception as e:
-                    print(
-                        f"API BY id fail for ankama_id {item.ankama_id} excep as {e}"
-                    )
-            print(
-                "Added "
-                + added_items.__str__()
-                + " "
-                + api_type.name
-                + " to db"
-            )
-        except Exception as e:
-            print("Exception when calling " + api_type.name + " API %s\n" % e)
-
-    # Delete every entries in the Item table
-    def clean_db(self):
-        all_bdd_Items = Item.objects.all()
-        print("Found " + all_bdd_Items.count().__str__() + " entries in db")
-        all_bdd_Items.delete()
-        print("Deleted")
-
-    # Create the api_instance and return the response from the correct API
-    def get_API_response(self, api_type):
-        # Defining the host is optional and defaults to https://api.dofusdu.de
-        configuration = dofusdude.Configuration(host="https://api.dofusdu.de")
-        with dofusdude.ApiClient(configuration) as api_client:
-            # Common parameters to all API
-            language = "fr"
-            game = "dofus2"
-            sort_level = "asc"
-            page_size = -1
-            page_number = 1
-
-            if api_type == ItemCategory.EQUIPMENT:
-                api_instance = dofusdude.EquipmentApi(api_client)
-                fields_item = [""]
-                filter_min_level = 0
-                filter_max_level = 201
-                return api_instance.get_items_equipment_list(
-                    language,
-                    game,
-                    page_size=page_size,
-                    page_number=page_number,
-                    sort_level=sort_level,
-                    filter_min_level=filter_min_level,
-                    filter_max_level=filter_max_level,
-                    fields_item=fields_item,
+    def get_full_data_and_save(self, items, api_type):
+        print(f'Start saving {api_type}')
+        item_saved = 0
+        item_failed = 0
+        for item in items:
+            try:
+                insert_item(
+                    self.client.get_API_solo_response(
+                        api_type, item.ankama_id
+                    ),
+                    api_type,
                 )
-            if api_type == ItemCategory.CONSUMABLE:
-                api_instance = dofusdude.ConsumablesApi(api_client)
-                return api_instance.get_items_consumables_list(
-                    language,
-                    game,
-                    sort_level=sort_level,
-                    page_size=page_size,
-                    page_number=page_number,
-                )
-            if api_type == ItemCategory.COSMETIC:
-                api_instance = dofusdude.CosmeticsApi(api_client)
-                return api_instance.get_all_cosmetics_list(
-                    language,
-                    game,
-                    sort_level=sort_level,
-                )
-            if api_type == ItemCategory.RESOURCE:
-                api_instance = dofusdude.ResourcesApi(api_client)
-                return api_instance.get_all_items_resources_list(
-                    language,
-                    game,
-                    sort_level=sort_level,
-                )
+                item_saved += 1
 
-    def get_API_solo_response(self, api_type, ankama_id):
-        # Defining the host is optional and defaults to https://api.dofusdu.de
-        configuration = dofusdude.Configuration(host="https://api.dofusdu.de")
-        with dofusdude.ApiClient(configuration) as api_client:
-            # Common parameters to all API
-            language = "fr"
-            game = "dofus2"
-
-            if api_type == ItemCategory.EQUIPMENT:
-                api_instance = dofusdude.EquipmentApi(api_client)
-                return api_instance.get_items_equipment_single(
-                    language,
-                    ankama_id,
-                    game,
-                )
-            if api_type == ItemCategory.CONSUMABLE:
-                api_instance = dofusdude.ConsumablesApi(api_client)
-                return api_instance.get_items_consumables_single(
-                    language,
-                    ankama_id,
-                    game,
-                )
-            if api_type == ItemCategory.COSMETIC:
-                api_instance = dofusdude.CosmeticsApi(api_client)
-                return api_instance.get_cosmetics_single(
-                    language,
-                    ankama_id,
-                    game,
-                )
-            if api_type == ItemCategory.RESOURCE:
-                api_instance = dofusdude.ResourcesApi(api_client)
-                return api_instance.get_items_resources_single(
-                    language,
-                    ankama_id,
-                    game,
-                )
+            except Exception as e:
+                item_failed += 1
+                print(f"Fail to save item : { {item.ankama_id}, {item.name} }")
+                print(e)
+        print(f"Finish saving {api_type} :")
+        print(f"Saved {item_saved} items.")
+        print(f"Failed to save {item_failed} items.")
