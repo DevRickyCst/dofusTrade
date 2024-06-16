@@ -1,6 +1,9 @@
 from django.core.management.base import BaseCommand
 
 from characterManager.models import CharacterClass, Server
+from itemViewer.models import Element
+
+from .utils.dofusdudeClient import DofusdudeClient
 
 # List od servers
 SERVER_LIST = [
@@ -40,20 +43,21 @@ PERSONNAGE_CLASS_LIST = [
 class Command(BaseCommand):
     help = "Import dofus information handle manually"
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.client = DofusdudeClient()
+
     def handle(self, *args, **kwargs):
 
         # TODO: See how to delete the data before
         # Clean database
         # Server().objects.all().delete()
         # CharacterClass().objects.all().delete()
-
         for _server in SERVER_LIST:
-            server = Server(name=_server)
-            server.save()
+            Server.objects.get_or_create(name=_server)
 
         for _characterClass in PERSONNAGE_CLASS_LIST:
-            perso = CharacterClass(
+            CharacterClass.objects.get_or_create(
                 name=_characterClass,
                 logo_url=f"/static/image/logo_personnage/{_characterClass}.png",
             )
-            perso.save()

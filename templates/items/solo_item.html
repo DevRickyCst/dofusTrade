@@ -17,6 +17,12 @@
                     <li class="list-group-item">{{ effect.formatted }}</li>
                 {% endfor %}
             </ul>
+            <p class="card-text">Recipe:</p>
+            <ul class="list-group">
+                {% for recipe in item.recipe %}
+                    <li class="list-group-item">{{ recipe.item_ankama_id }}</li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </div>
