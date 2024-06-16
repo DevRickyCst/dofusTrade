@@ -1,7 +1,13 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from .items_meta import EffectSingle, ImageUrls, ItemCategory, Itemtype, RecipeSingle
+from .items_meta import (
+    EffectSingle,
+    ImageUrls,
+    ItemCategory,
+    Itemtype,
+    RecipeSingle,
+)
 
 
 class Item(models.Model):
