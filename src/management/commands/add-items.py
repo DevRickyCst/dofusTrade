@@ -57,7 +57,7 @@ class Command(BaseCommand):
                     ),
                     api_type,
                 )
-                #print(f"Save item : {item.ankama_id}, {item.name} ")
+                # print(f"Save item : {item.ankama_id}, {item.name} ")
                 item_saved += 1
 
             except Exception as e:

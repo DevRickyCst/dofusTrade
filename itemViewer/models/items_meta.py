@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class ItemCategory(models.TextChoices):
     CONSUMABLE = "consumables"
     EQUIPMENT = "equipments"
@@ -39,7 +40,7 @@ class Element(models.Model):
 
     def __str__(self):
         return "id: " + self.id.__str__() + ", name : " + self.name
-    
+
 
 class EffectSingle(models.Model):
     int_minimum = models.IntegerField(default=0)

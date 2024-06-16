@@ -86,6 +86,6 @@ class DofusdudeClient:
                 return api_instance.get_items_resources_single(**params)
 
     def get_meta_elements(self):
-         with dofusdude.ApiClient(self.configuration) as api_client:
-              api_instance = dofusdude.MetaApi(api_client)
-              return(api_instance.get_meta_elements())
+        with dofusdude.ApiClient(self.configuration) as api_client:
+            api_instance = dofusdude.MetaApi(api_client)
+            return api_instance.get_meta_elements()

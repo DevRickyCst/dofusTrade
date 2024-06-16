@@ -34,16 +34,20 @@ def get_and_render_all_items(request):
     page_number = int(request.GET.get("page_number", 1))
 
     tab_var = {
-            "item_name": item_name,
-            "lvl_max": lvl_max,
-            "lvl_min": lvl_min,
-            "page_size": page_size,
-            "page_number": page_number,
-        }
+        "item_name": item_name,
+        "lvl_max": lvl_max,
+        "lvl_min": lvl_min,
+        "page_size": page_size,
+        "page_number": page_number,
+    }
 
-    items_query = Item.objects.filter(
-        category=categorie, level__lte=lvl_max, level__gte=lvl_min
-    ).select_related("type", "image_urls").prefetch_related('effects', 'recipe')
+    items_query = (
+        Item.objects.filter(
+            category=categorie, level__lte=lvl_max, level__gte=lvl_min
+        )
+        .select_related("type", "image_urls")
+        .prefetch_related("effects", "recipe")
+    )
 
     # Ajout du filtre pour le nom de l'item s'il est spécifié
     if item_name:

@@ -1,12 +1,13 @@
 from itemViewer.models import (
     EffectSingle,
+    Element,
     ImageUrls,
     Item,
     Itemtype,
     Range,
     RecipeSingle,
-    Element
 )
+
 
 def insert_item(item, api_type):
     try:
@@ -44,15 +45,14 @@ def insert_item(item, api_type):
         if item.effects != None:
             for _effect in item.effects:
                 type, created = Element.objects.get_or_create(
-                    id = _effect.type.id,
-                    defaults={'name': _effect.type.name}
+                    id=_effect.type.id, defaults={"name": _effect.type.name}
                 )
 
                 # Create the effect single
                 effect = EffectSingle.objects.create(
                     int_minimum=_effect.int_minimum,
                     int_maximum=_effect.int_maximum,
-                    element = type,
+                    element=type,
                     ignore_int_min=_effect.ignore_int_min,
                     ignore_int_max=_effect.ignore_int_max,
                     formatted=_effect.formatted,

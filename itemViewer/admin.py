@@ -2,12 +2,12 @@ from django.contrib import admin
 
 from itemViewer.models import (
     EffectSingle,
+    Element,
     ImageUrls,
     Item,
     Itemtype,
-    RecipeSingle,
     Range,
-    Element
+    RecipeSingle,
 )
 
 # Register your models here.

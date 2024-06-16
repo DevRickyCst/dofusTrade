@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 
 from characterManager.models import CharacterClass, Server
 from itemViewer.models import Element
+
 from .utils.dofusdudeClient import DofusdudeClient
 
 # List od servers
