@@ -54,16 +54,19 @@
       <!-- Formulaire filtre tableau -->
     <div class="form_div col-4">
         <form class="filter_form" action="" method="get">
-            
             <h3>Items filter</h3>
+
+            <label for="item_name">Rechercher:</label>
+            <input type="text" id="item_name" name="item_name" value="{{tab_var.item_name}}"><br>
+
             <label for="page_size">Taille de page:</label>
             <input type="number" id="page_size" name="page_size" value="{{tab_var.page_size}}" min="1"><br>
         
             <label for="lvl_min">Niveau minimum:</label>
-            <input type="number" id="lvl_min" name="lvl_min" value="1" min="1"><br>
+            <input type="number" id="lvl_min" name="lvl_min" value="{{tab_var.lvl_min}}" min="1"><br>
         
             <label for="lvl_max">Niveau maximum:</label>
-            <input type="number" id="lvl_max" name="lvl_max" value="200" min="1"><br>
+            <input type="number" id="lvl_max" name="lvl_max" value="{{tab_var.lvl_max}}" min="1"><br>
         
             <button type="submit">Appliquer les filtres</button>
         </form>

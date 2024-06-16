@@ -1,13 +1,12 @@
-from itemViewer.models import EffectSingle, ImageUrls, Item, Itemtype, RecipeSingle
-
-
-# Delete every entries in the Item table
-def clean_db():
-    all_bdd_Items = Item.objects.all()
-    print("Found " + all_bdd_Items.count().__str__() + " entries in db")
-    all_bdd_Items.delete()
-    print("Deleted")
-
+from itemViewer.models import (
+    EffectSingle,
+    ImageUrls,
+    Item,
+    Itemtype,
+    Range,
+    RecipeSingle,
+    Element
+)
 
 def insert_item(item, api_type):
     try:
@@ -44,10 +43,16 @@ def insert_item(item, api_type):
         list_effects = []
         if item.effects != None:
             for _effect in item.effects:
+                type, created = Element.objects.get_or_create(
+                    id = _effect.type.id,
+                    defaults={'name': _effect.type.name}
+                )
+
                 # Create the effect single
                 effect = EffectSingle.objects.create(
                     int_minimum=_effect.int_minimum,
                     int_maximum=_effect.int_maximum,
+                    element = type,
                     ignore_int_min=_effect.ignore_int_min,
                     ignore_int_max=_effect.ignore_int_max,
                     formatted=_effect.formatted,
@@ -64,11 +69,10 @@ def insert_item(item, api_type):
             "pods": item.pods,
             "image_urls": image_urls_object,
         }
-        print(item)
+
         if hasattr(item, "ap_cost"):
             items_params["ap_cost"] = item.ap_cost
-        # if full_item.range:
-        #    items_params['range'] = full_item.range
+
         if hasattr(item, "max_cast_per_turn"):
             items_params["max_cast_per_turn"] = item.max_cast_per_turn
         if hasattr(item, "is_weapon"):
@@ -82,12 +86,17 @@ def insert_item(item, api_type):
         if hasattr(item, "critical_hit_bonus"):
             items_params["critical_hit_bonus"] = item.critical_hit_bonus
 
-        item = Item.objects.create(**items_params)
+        item_object = Item.objects.create(**items_params)
+        if hasattr(item, "range"):
+            if item.range is not None:
+                range = Range.objects.create(
+                    item=item_object, max=item.range.min, min=item.range.max
+                )
 
         for _effect in list_effects:
-            item.effects.add(_effect)
+            item_object.effects.add(_effect)
         for _recipe in list_recipe:
-            item.recipe.add(_recipe)
+            item_object.recipe.add(_recipe)
 
     except Exception as e:
         raise e

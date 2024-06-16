@@ -21,7 +21,6 @@ class Item(models.Model):
 
     # Weapon
     ap_cost = models.IntegerField(default=None, null=True)
-    range = models.IntegerField(default=None, null=True)
     max_cast_per_turn = models.IntegerField(default=None, null=True)
     is_weapon = models.BooleanField(default=False)
     is_two_handed = models.BooleanField(default=None, null=True)
@@ -37,3 +36,11 @@ class Item(models.Model):
 
     def __str__(self):
         return "id: " + self.ankama_id.__str__() + ", name : " + self.name
+
+
+class Range(models.Model):
+    item = models.OneToOneField(
+        Item, on_delete=models.CASCADE, primary_key=True
+    )
+    min = models.IntegerField()
+    max = models.IntegerField()

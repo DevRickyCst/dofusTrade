@@ -45,7 +45,7 @@ class DofusdudeClient:
 
         return api_instance
 
-    def get_API_response(self, api_type: ItemCategory):
+    def get_items_from_category(self, api_type: ItemCategory):
         """Retrieve all item from ItemCategory"""
         api_instance = self.get_right_api_instance(api_type)
 
@@ -60,11 +60,9 @@ class DofusdudeClient:
                     **self.basic_params
                 ).items
             elif api_type == ItemCategory.COSMETIC:
-                print('ok')
                 return api_instance.get_all_cosmetics_list(
                     **self.solo_item_param
                 ).items
-                print('ok')
             elif api_type == ItemCategory.RESOURCE:
                 return api_instance.get_all_items_resources_list(
                     **self.solo_item_param
@@ -86,3 +84,8 @@ class DofusdudeClient:
                 return api_instance.get_cosmetics_single(**params)
             elif api_type == ItemCategory.RESOURCE:
                 return api_instance.get_items_resources_single(**params)
+
+    def get_meta_elements(self):
+         with dofusdude.ApiClient(self.configuration) as api_client:
+              api_instance = dofusdude.MetaApi(api_client)
+              return(api_instance.get_meta_elements())

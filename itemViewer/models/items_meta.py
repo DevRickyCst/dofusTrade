@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class ItemCategory(models.TextChoices):
     CONSUMABLE = "consumables"
     EQUIPMENT = "equipments"
@@ -35,9 +34,17 @@ class RecipeSingle(models.Model):
         return "id: " + self.id.__str__()
 
 
+class Element(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return "id: " + self.id.__str__() + ", name : " + self.name
+    
+
 class EffectSingle(models.Model):
     int_minimum = models.IntegerField(default=0)
     int_maximum = models.IntegerField(default=0)
+    element = models.ForeignKey(Element, on_delete=models.CASCADE)
     ignore_int_min = models.BooleanField(default=False)
     ignore_int_max = models.BooleanField(default=False)
     formatted = models.CharField(max_length=200)

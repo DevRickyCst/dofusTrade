@@ -8,13 +8,6 @@ app_name = "items"
 
 context = {"app": app_name}
 
-tab_var = {
-    "page_number": 1,
-    "page_size": 20,
-    "lvl_max": 200,
-    "lvl_min": 1,
-}
-
 
 def index(request):
     return render(request, context=context)
@@ -34,23 +27,31 @@ def get_and_render_all_items(request):
         categorie = ItemCategory.COSMETIC
 
     # filter
+    item_name = request.GET.get("item_name", None)
     lvl_max = int(request.GET.get("lvl_max", 200))
     lvl_min = int(request.GET.get("lvl_min", 1))
     page_size = int(request.GET.get("page_size", 20))
     page_number = int(request.GET.get("page_number", 1))
 
-    tab_var.update(
-        {
+    tab_var = {
+            "item_name": item_name,
             "lvl_max": lvl_max,
             "lvl_min": lvl_min,
             "page_size": page_size,
             "page_number": page_number,
         }
-    )
-    items = Item.objects.filter(
+
+    items_query = Item.objects.filter(
         category=categorie, level__lte=lvl_max, level__gte=lvl_min
-    ).select_related("type", "image_urls")[
-        page_size * (page_number - 1) : page_size * (page_number)
+    ).select_related("type", "image_urls").prefetch_related('effects', 'recipe')
+
+    # Ajout du filtre pour le nom de l'item s'il est spécifié
+    if item_name:
+        items_query = items_query.filter(name__icontains=item_name)
+
+    # Pagination des résultats
+    items = items_query[
+        page_size * (page_number - 1) : page_size * page_number
     ]
 
     context.update(
