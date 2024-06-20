@@ -5,47 +5,7 @@ from django.http import JsonResponse
 from src.custumRender import render
 
 from .models import Character, Set, SetCaracteristique
-
-
-@login_required
-def view_personnages(request, id=None):
-    """View to render the character temlate with a specific id or no."""
-    user = User(pk=request.user.id)
-    # Catch error if id is out of range
-    try:
-        main_character = Character.objects.get(pk=id)
-    except:
-        main_character = Character.objects.first()
-        # Create a character if not exist
-        if main_character is None:
-            main_character = Character(name="Mon premier perso", user=user)
-            main_character.save()
-
-    # Get character associated id
-    main_charact_id = main_character.id
-
-    # Get set of carac associated with the character
-    stuff = Set.objects.filter(character_id=main_charact_id).first()
-
-    # Other character info in order to render them
-    other_charact = (
-        Character.objects.filter(user_id=request.user.id)
-        .prefetch_related("character_class")
-        .values(
-            "id", "name", "character_class__name", "character_class__logo_url"
-        )
-    )
-
-    return render(
-        request,
-        "base.html",
-        context={
-            "app": "character",
-            "character": main_character,
-            "other_charact": other_charact,
-            "main_character_set": stuff,
-        },
-    )
+from itemViewer.models import Item, ItemCategory
 
 
 def update_carac_set(request):

@@ -1,12 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from itemViewer.models import (
-    EffectSingle,
-    Element,
-    ImageUrls,
-    Item,
-    RecipeSingle,
-)
+from itemViewer.models import EffectSingle, Element, ImageUrls, Item, RecipeSingle
 
 
 class Command(BaseCommand):
