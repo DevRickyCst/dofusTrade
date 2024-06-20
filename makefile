@@ -18,4 +18,3 @@ install:
 	python manage.py makemigrations itemViewer
 	python manage.py makemigrations characterManager
 	python manage.py migrate
-	python manage.py createsuperuser

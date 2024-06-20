@@ -3,3 +3,5 @@ Django==5.0.4
 django-compressor
 libsass
 django-sass-processor
+djangorestframework 
+djangorestframework_simplejwt
